@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.eveyen.RecordBao.R;
 import com.eveyen.RecordBao.SQL.SQL_Item;
-import com.eveyen.RecordBao.SQL.SQL_implement;
 
 import java.io.File;
 import java.util.List;
@@ -27,7 +26,6 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
 
     private Context mContext;
     private List<SQL_Item> mlist;
-    private SQL_implement item;
     public Note_Adapter(Context c , List<SQL_Item> list){
         mlist = list;
         mContext = c;
@@ -68,7 +66,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         LinearLayout lv_note = holder.lv_note;
         lv_note.setBackgroundColor(temp.getColor());
         String[] stitle=temp.getTitle().split("_");
-        tv_title.setText(stitle[1]+"/"+stitle[2]+"   "+stitle[3]+":"+stitle[4]+":"+stitle[5]);
+        tv_title.setText(stitle[1]+"/"+stitle[2]+"   "+stitle[3]+":"+stitle[4]+":"+stitle[5].split(".wav")[0]);
         tv_content.setText(temp.getContent());
     }
 

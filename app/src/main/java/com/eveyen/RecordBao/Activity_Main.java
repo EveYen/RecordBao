@@ -30,7 +30,6 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
     private NavigationView navigationView;
     private GoogleApiClient client;
 
-    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +48,10 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-
+    /**
+     * initDrawer
+     * 初始化整個含側邊選單的layout
+     */
     private void initDrawer() {
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -59,6 +61,10 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
         toggle.syncState();
     }
 
+    /**
+     * initNavigationView
+     * 指定側邊選單內的listener
+     */
     private void initNavigationView() {
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         if (navigationView != null) {
@@ -66,6 +72,10 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
         }
     }
 
+    /**
+     * onBackPressed
+     * 設定返回鍵的動作
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -78,12 +88,22 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
         }
     }
 
+    /**
+     * 載入menu
+     * @param menu
+     * @return boolean
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
+    /**
+     * 設置menu內選項的動作
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -95,10 +115,15 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * onNavigationItemSelected
+     * 設定側邊選單動作，開啟fragment
+     * @param item
+     * @return
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
         switch (item.getItemId()) {
             case R.id.nav_note:
                 fragment = new Fragment_Main();

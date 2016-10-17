@@ -1,28 +1,36 @@
-package com.eveyen.RecordBao.File;
+package com.eveyen.RecordBao.Tools;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Environment;
 import android.util.Log;
+
+import com.eveyen.RecordBao.SQL.SQL_Item;
+import com.eveyen.RecordBao.SQL.SQL_implement;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  *  作者：EveYen
- *  最後修改日期：9/6
+ *  最後修改日期：10/18
  *  完成功能：搜尋檔案/回傳檔案路徑
  */
-public class File_Function {
+public class Data_Function {
+
     private static List<File> list = new ArrayList<File>();
+    private static SQL_implement item;
 
     public static List<File> search(File file, String[] ext) {
         list.clear();
         searchFile(file, ext);
         return list;
     }
-
     private static void searchFile(File file, String[] ext) {
         if (file != null) {
             if (file.isDirectory()) {//檢查是否是目錄
@@ -61,7 +69,6 @@ public class File_Function {
         if (!lrcFile.exists()) {
             lrcFile.mkdirs();
         }
-
         return rootPath;
     }
 
@@ -83,5 +90,19 @@ public class File_Function {
             raf.close();
         }
     }
+    public static String getFilepath(){
+        SimpleDateFormat sdf = new SimpleDateFormat("MM_dd_HH_mm_ss");
+        Date date = new Date();
+        String name = "note_" + sdf.format(date);
+        String voicePath = Data_Function.getRootPath() + name + ".wav";
+        return voicePath;
+    }
 
+    public static void saveData(Context c,String Title, String getText, String voicePath){
+        int[] colorset={Color.argb(255,255,201,181),Color.argb(255,192,185,221),Color.argb(255,197,255,216),Color.argb(255,244,241,139),Color.argb(255,169,211,255)};
+        int r = (int)(Math.random()* 5);
+        item = new SQL_implement(c);
+        SQL_Item temp = new SQL_Item(0, new Date().getTime(), colorset[r], Title, getText, voicePath, 0);
+        item.insert(temp);
+    }
 }

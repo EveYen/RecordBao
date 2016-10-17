@@ -2,7 +2,6 @@ package com.eveyen.RecordBao;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,10 +18,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eveyen.RecordBao.CKIP.Text_mining;
-import com.eveyen.RecordBao.File.File_Function;
+import com.eveyen.RecordBao.Tools.Data_Function;
 import com.eveyen.RecordBao.Record.Record_implement;
-import com.eveyen.RecordBao.SQL.SQL_Item;
-import com.eveyen.RecordBao.SQL.SQL_implement;
+import com.eveyen.RecordBao.Tools.GoogleSpeech;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -30,17 +28,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.nio.charset.Charset;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
 /**
  *  作者：EveYen
- *  最後修改日期：10/13
+ *  最後修改日期：10/17
  *  完成功能：可以錄音，播放
  **/
 
@@ -57,9 +49,6 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
     private boolean isRecording=false;
     long timeWhenPaused = 0;
 
-    private SQL_implement item;
-    private ArrayList<SQL_Item> lists;
-
     Text_mining text_mining;
     String getText = "null";
     String Title = "";
@@ -67,11 +56,6 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
     ArrayList<String> inputList = new ArrayList<String>(); //宣告動態陣列 存切詞的name
     ArrayList<String> TagList = new ArrayList<String>();   //宣告動態陣列 存切詞的詞性
     ArrayList<String> DateList = new ArrayList<String>();
-
-    public Fragment_Record() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,15 +83,6 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
 
         bt_record.setEnabled(true);
     }
-
-    public void initData(){
-        SimpleDateFormat sdf = new SimpleDateFormat("MM_dd_HH_mm_ss");
-        Date date = new Date();
-        String name = "note_" + sdf.format(date);
-        voicePath = File_Function.getRootPath() + name + ".wav";
-        Title = name;
-    }
-
     public void initListener() {
         bt_record.setOnClickListener(this);
     }
@@ -127,7 +102,8 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
     }
 
     private void startRecord() {
-        initData();
+        voicePath = Data_Function.getFilepath();
+        Title = voicePath.split("/WAV/")[1];
         isRecording = true;
         com_voice_time.setBase(SystemClock.elapsedRealtime() + timeWhenPaused);
         com_voice_time.start();
@@ -156,6 +132,9 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
         audioRecord = null;
     }
 
+    /**
+     * 跳出是否儲存的提示
+     */
     public void Alert() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(getContext());
         dialog.setTitle("Do you want to save this record?");
@@ -165,7 +144,7 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
             public void onClick(DialogInterface dialog, int which) {
                 com_voice_time.setBase(SystemClock.elapsedRealtime());
                 try {
-                    startWebRecognizer(File_Function.readFile(voicePath));
+                    startWebRecognizer(Data_Function.readFile(voicePath));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -188,28 +167,12 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
         dialog.show();
     }
 
-    private HttpURLConnection getConnection(){
-
-        HttpURLConnection connection = null;
-        try{
-            URL httpUrl = new URL("http://www.google.com/speech-api/v2/recognize?xjerr=1&client=chromium&maxresults=1&lang=zh-TW&key=AIzaSyBPohttFCsLdkFGqyuAL8qcWuYkMv9VJJo");
-            connection = (HttpURLConnection)httpUrl.openConnection();
-            connection.setDoOutput(true);
-            connection.setDoInput(true);
-            connection.setRequestMethod("POST");
-            connection.setRequestProperty("Content-Type", "audio/l16; rate=8000");
-        }catch (MalformedURLException ex){
-            Log.e("TAG","getConnection();Invalid url format",ex);
-        }catch (ProtocolException ex){
-            Log.e("TAG", "getConnection();Un support protocol",ex);
-        }catch (IOException ex){
-            Log.e("TAG","getConnection();IO error while open connection",ex);
-        }
-        return connection;
-    }
-
+    /**
+     * 語音辨識
+     * @param wavData
+     */
     public void startWebRecognizer(final byte[] wavData){
-        final HttpURLConnection connection = getConnection();
+        final HttpURLConnection connection = GoogleSpeech.getConnection();
         getText="";
         if (connection == null){
             Log.e("TAG","未連上oogle speech");
@@ -218,28 +181,28 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
                 @Override
                 public void run(){
                     try {
-                        DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
+                        DataOutputStream dos = new DataOutputStream(connection.getOutputStream());//上傳需要辨識的資料
                         dos.write(wavData);
                         dos.flush();
                         dos.close();
 
                         InputStreamReader inputStreamReader = new InputStreamReader(connection.getInputStream(),
-                                Charset.forName("utf-8"));
+                                Charset.forName("utf-8"));//取回辨識完成的資料
                         BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
                         String decodedString = "";
                         String StrTemp;
                         while ((StrTemp = bufferedReader.readLine()) != null){
                             decodedString += StrTemp;
                         }
-                        getText = getTextString(decodedString);
+                        getText = GoogleSpeech.getTextString(decodedString);//解析資料
 
-                        text_mining = new Text_mining(getText);
+                        text_mining = new Text_mining(getText); //傳上去CKIP
                         inputList = text_mining.getInputList();
                         TagList = text_mining.getTagList();
                         DateList = text_mining.getDate();
                         Location = text_mining.getLocation();
 
-                        updateProHandler.sendEmptyMessage(500);
+                        updateProHandler.sendEmptyMessage(500);//這個thread完成才送出訊息給Handler
                         Log.e("TAG",getText);
                     }catch (IOException ex){
                         Log.e("TAG","傳檔失敗");
@@ -249,16 +212,9 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
         }
     }
 
-    public String getTextString(String textString)
-    {
-        String returnStr="-----";
-        if(textString.split("transcript\":\"").length>1) {
-            returnStr = textString.split("transcript\":\"")[1].split("\"")[0];
-        }
-        return returnStr;
-    }
-
-
+    /**
+     * 接收到相關訊息並顯示
+     */
     Handler updateProHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             if (msg.what == 500) {
@@ -269,18 +225,10 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
                 tv_record_trans.append("\n");
                 tv_record_trans.append("地點：");
                 tv_record_trans.append(Location);
-                saveData();
+                Data_Function.saveData(getContext(),Title,getText,voicePath);
             }
         }
     };
-
-    public void saveData(){
-        int[] colorset={Color.argb(255,255,201,181),Color.argb(255,192,185,221),Color.argb(255,197,255,216),Color.argb(255,244,241,139),Color.argb(255,169,211,255)};
-        int r = (int)(Math.random()* 5);
-        item = new SQL_implement(getContext());
-        SQL_Item temp = new SQL_Item(0, new Date().getTime(), colorset[r], Title, getText, voicePath, 0);
-        item.insert(temp);
-    }
 
     public void onDestroy() {
         super.onDestroy();

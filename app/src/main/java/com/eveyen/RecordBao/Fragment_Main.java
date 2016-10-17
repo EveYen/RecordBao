@@ -32,10 +32,6 @@ public class Fragment_Main extends Fragment {
     private ArrayList<SQL_Item> lists;
     private RecyclerView rvContacts;
 
-    public Fragment_Main() {
-        // Required empty public constructor
-    }
-
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -55,12 +51,8 @@ public class Fragment_Main extends Fragment {
         item = new SQL_implement(getContext());
         lists = SQL_implement.getAll();
 
-
-
         final Note_Adapter adapter = new Note_Adapter(getContext(),lists);
-
         ItemTouchHelper.Callback mCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP|ItemTouchHelper.DOWN,ItemTouchHelper.RIGHT) {
-
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                 int fromPosition = viewHolder.getAdapterPosition();
@@ -68,11 +60,10 @@ public class Fragment_Main extends Fragment {
                 adapter.notifyItemMoved(fromPosition, toPosition);
                 return true;
             }
-
+            //
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int position = viewHolder.getAdapterPosition();
-
                 File f = new File(lists.get(position).getFileName());
                 if(f.exists()){
                     item.delete(lists.get(position));
@@ -121,5 +112,4 @@ public class Fragment_Main extends Fragment {
             }
         });
     }
-
 }
