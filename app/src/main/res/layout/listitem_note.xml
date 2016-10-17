@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal"
+    android:background="#d6fee4"
+    android:gravity="top|left|center"
+    android:elevation="5dp"
+    android:id="@+id/lv_note"
+    android:minHeight="100dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/ItemTrans"
+            android:textSize="16dp"
+            android:minHeight="80dp" />
+
+        <TextView
+            android:id="@+id/ItemName"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:text="---"
+            android:textAlignment="textEnd"
+            android:gravity="bottom" />
+    </LinearLayout>
+
+
+</LinearLayout>
