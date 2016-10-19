@@ -62,6 +62,7 @@ public class Fragment_CKIP extends Fragment {
                             text_mining = new Text_mining(teststring);
                             inputList = text_mining.getInputList();
                             TagList = text_mining.getTagList();
+                            DateList = text_mining.getDate();
                             updateProHandler.sendEmptyMessage(500);
                         }
                     }.start();
@@ -83,7 +84,14 @@ public class Fragment_CKIP extends Fragment {
             if (msg.what == 500) {
                 for(int i=0;i<inputList.size();i++){
                     textView.append(inputList.get(i));
-                    textView.append(TagList.get(i));
+                    textView.append("("+TagList.get(i)+")   ");
+                }
+                textView.append("\n");
+                if(DateList.size()!=0) {
+                    textView.append("時間：");
+                    for (int i = 0; i < DateList.size(); i++) {
+                        textView.append(DateList.get(i));
+                    }
                     textView.append("\n");
                 }
             }
