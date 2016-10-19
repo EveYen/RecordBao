@@ -4,5 +4,17 @@
     <color name="colorPrimaryDark">#164021</color>
     <color name="colorAccent">#EFC7C2</color>
 
+    <color name="swipe_blue">#00b2ff</color>
+    <color name="swipe_red">#ff3b3b</color>
+    <color name="swipe_green">#2dff2d</color>
+    <color name="swipe_orenge">#ff8223</color>
+
+    <color name="note_pink">#ffa6bc</color>
+    <color name="note_purple">#a991ff</color>
+    <color name="note_skyblue">#87a5ff</color>
+    <color name="note_yellow">#ffe667</color>
+    <color name="note_green">#8aff90</color>
+    <color name="note_orange">#ffab6b</color>
+
 
 </resources>

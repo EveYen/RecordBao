@@ -91,13 +91,8 @@ public class Fragment_Main extends Fragment {
          */
         final SwipeRefreshLayout swiperefreshlayout = (SwipeRefreshLayout) v.findViewById(R.id.demo_swiperefreshlayout);
         swiperefreshlayout.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        swiperefreshlayout.setColorSchemeResources(android.R.color.holo_blue_light,
-                android.R.color.holo_red_light,android.R.color.holo_orange_light,
-                android.R.color.holo_green_light);//刷新進度條顏色
-        swiperefreshlayout.setProgressViewOffset(false, 0, (int) TypedValue
-                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
-                        .getDisplayMetrics()));
-
+        swiperefreshlayout.setColorSchemeResources(R.color.swipe_blue,R.color.swipe_red,R.color.swipe_orenge,R.color.swipe_green);//刷新進度條顏色
+        swiperefreshlayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
         swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

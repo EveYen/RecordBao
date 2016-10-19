@@ -18,8 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eveyen.RecordBao.CKIP.Text_mining;
-import com.eveyen.RecordBao.Tools.Data_Function;
 import com.eveyen.RecordBao.Record.Record_implement;
+import com.eveyen.RecordBao.Tools.Data_Function;
 import com.eveyen.RecordBao.Tools.GoogleSpeech;
 
 import java.io.BufferedReader;
@@ -218,13 +218,14 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
     Handler updateProHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             if (msg.what == 500) {
-                tv_record_trans.append("時間：");
-                for(int i=0;i<DateList.size();i++){
-                    tv_record_trans.append(DateList.get(i));
+                //tv_record_trans.append("時間：");
+                for(int i=0;i<inputList.size();i++){
+                    tv_record_trans.append(inputList.get(i));
+                    tv_record_trans.append(TagList.get(i));
+                    tv_record_trans.append("\n");
                 }
-                tv_record_trans.append("\n");
-                tv_record_trans.append("地點：");
-                tv_record_trans.append(Location);
+                //tv_record_trans.append("時間：");
+                //tv_record_trans.append(DateList.get(0));
                 Data_Function.saveData(getContext(),Title,getText,voicePath);
             }
         }

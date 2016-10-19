@@ -1,6 +1,8 @@
 package com.eveyen.RecordBao.CKIP;
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import tw.cheyingwu.ckip.CKIP;
 import tw.cheyingwu.ckip.Term;
@@ -42,10 +44,16 @@ public class Text_mining {
         return TagList;
     }
 
+
+    /**
+     * 找名詞內含有(中英)數字＋年月日
+     *
+     */
     public ArrayList<String> getDate(){
         ArrayList<String> DateList = new ArrayList<String>(); //宣告動態陣列 存時間
         for(int i = 0;i<TagList.size();i++){
             if(TagList.get(i).equals("N")){
+                
                 int lastindex = inputList.get(i).length()-1;
                 switch (inputList.get(i).charAt(lastindex)){
                         case '年':
@@ -74,6 +82,40 @@ public class Text_mining {
         return DateList;
     }
 
+    public boolean isDateFormat(String str){
+        int lastindex = str.length()-1;
+        int num = getNumber(str.substring(0,lastindex-1));
+        if(num>0 && str.charAt(lastindex)=='年') return true;
+        return false;
+    }
+    private int getNumber(String str){
+        String temp=null;
+        Pattern pattern = Pattern.compile("[一二三四五六七八九十]");
+        Matcher matcher = pattern.matcher(str);
+        if(matcher.find()){
+            temp = matcher.group();
+            for(int j=0;j<temp.length();j++){
+                if(temp.charAt(j)=='十'){
+                    if(j==0) temp="10";
+                }
+            }
+        }
+        if(temp==null){
+            for(int i=0;i<str.length();i++){
+                if(Character.isDigit(str.charAt(i))){
+                    temp += str.charAt(i);
+                }
+                else{
+                    break;
+                }
+            }
+        }
+        if(temp!=null){
+            return Integer.parseInt(temp);
+        }
+        return -1;
+    }
+
     public String getLocation(){
         for(int i = 0;i<TagList.size()-1;i++){
             if(TagList.get(i).equals("P")){
@@ -82,6 +124,4 @@ public class Text_mining {
         }
         return "";
     }
-
-
 }

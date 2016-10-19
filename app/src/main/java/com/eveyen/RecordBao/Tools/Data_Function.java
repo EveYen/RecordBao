@@ -99,8 +99,8 @@ public class Data_Function {
     }
 
     public static void saveData(Context c,String Title, String getText, String voicePath){
-        int[] colorset={Color.argb(255,255,201,181),Color.argb(255,192,185,221),Color.argb(255,197,255,216),Color.argb(255,244,241,139),Color.argb(255,169,211,255)};
-        int r = (int)(Math.random()* 5);
+        int[] colorset={Color.argb(180,255,166,188),Color.argb(180,169,145,255),Color.argb(180,135,165,255),Color.argb(180,255,230,103),Color.argb(180,138,255,144),Color.argb(180,255,171,107)};
+        int r = (int)(Math.random()*6);
         item = new SQL_implement(c);
         SQL_Item temp = new SQL_Item(0, new Date().getTime(), colorset[r], Title, getText, voicePath, 0);
         item.insert(temp);
