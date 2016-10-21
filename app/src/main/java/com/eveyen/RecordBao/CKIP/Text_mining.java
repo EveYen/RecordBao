@@ -20,11 +20,10 @@ public class Text_mining {
 
     static ArrayList<String> inputList; //宣告動態陣列 存切詞的name
     static ArrayList<String> TagList;   //宣告動態陣列 存切詞的詞性
-    static String DateFormat;
-    Calendar c;
+    static ArrayList<Boolean> DirtyList;   //宣告動態陣列 確認是否已經分析過
+    Calendar calendar,now;
 
     public Text_mining(String textString){
-
         inputList = new ArrayList<String>(); //宣告動態陣列 存切詞的name
         TagList = new ArrayList<String>();
         String CKIP_IP = "140.109.19.104";
@@ -39,6 +38,7 @@ public class Text_mining {
         for (Term t : connect.getTerm()) {
             inputList.add(t.getTerm()); // t.getTerm()會讀到斷詞的String，將其存到inputList陣列
             TagList.add(t.getTag());    // t.getTag() 會讀到斷詞的詞性，將其存到TagList陣列
+            DirtyList.add(false);
         }
     }
 
@@ -50,39 +50,47 @@ public class Text_mining {
         return TagList;
     }
 
-
     /**
      * 找名詞內含有(中英)數字＋年月日
      *
      */
-    public ArrayList<String> getDate(){
-        c = Calendar.getInstance();
-        int ampm=-1; //凌晨＝1;早上＝1，上午＝1，中午＝2，下午＝2，傍晚＝2，晚上＝2
-        ArrayList<String> DateList = new ArrayList<String>(); //宣告動態陣列 存時間
+    public String getDate(){
+        calendar = Calendar.getInstance();
+        now = Calendar.getInstance();
+        String datestr = "";
+        int AM_PM = -1; //凌晨＝1;早上＝1，上午＝1，中午＝2，下午＝2，傍晚＝2，晚上＝2
         for(int i = 0;i<TagList.size();i++){
             String token = inputList.get(i);
             String tag = TagList.get(i);
             if(tag.equals("N")){
-                if(token.equals("早上")||token.equals("凌晨")||token.equals("上午")||token.equals("清早")) ampm = 1;
-                if(token.equals("中午")||token.equals("下午")||token.equals("傍晚")||token.equals("晚上")) ampm = 2;
+                if(token.equals("早上")||token.equals("凌晨")||token.equals("上午")||token.equals("清早")) AM_PM = 1;
+                if(token.equals("中午")||token.equals("下午")||token.equals("傍晚")||token.equals("晚上")) AM_PM = 2;
+                if(token.equals("今天")) datestr = testDateFormat("1天", calendar, now, AM_PM);
+                if(token.equals("明天")) datestr = testDateFormat("2天", calendar, now, AM_PM);
+                if(token.equals("後天")) datestr = testDateFormat("3天", calendar, now, AM_PM);
+
             }
-            if(tag.equals("N") && testDateFormat(token,c,ampm)!=null){ //CKIP解析成名詞
-                DateList.add(testDateFormat(token,c,ampm));
+            if(tag.equals("POST")){
+                if(token.equals("半"))
+                    datestr = testDateFormat("30分", calendar, now, AM_PM);
+            }
+            if(tag.equals("N") && testDateFormat(token, calendar, now, AM_PM)!=null){ //CKIP解析成名詞
+                datestr = testDateFormat(token, calendar, now, AM_PM);
             }
             if(tag.equals("DET")&& i<TagList.size()-1) {//CKIP解析成名詞
                 if(inputList.get(i + 1).equals("號")||inputList.get(i + 1).equals("分")||inputList.get(i + 1).equals("點")){
                     if(token.indexOf('點')>0){
-                        DateList.add(testDateFormat(token.split("點")[0]+"點",c,ampm));
-                        DateList.add(testDateFormat(token.split("點")[1]+inputList.get(i+1),c,ampm));
+                        datestr = testDateFormat(token.split("點")[0]+"點", calendar, now, AM_PM);
+                        datestr = testDateFormat(token.split("點")[1]+inputList.get(i+1), calendar, now, AM_PM);
                     }
                     else {
                         token+=inputList.get(i+1);
-                        DateList.add(testDateFormat(token,c,ampm));
+                        datestr = testDateFormat(token, calendar, now, AM_PM);
                     }
                 }
             }
         }
-        return DateList;
+        return datestr;
     }
 
     /**
@@ -90,37 +98,39 @@ public class Text_mining {
      * @param str
      * @return 日期
      */
-    public String testDateFormat(String str,Calendar calendar,int ampm){
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    public String testDateFormat(String str, Calendar calendar,  Calendar now, int ampm){
+        SimpleDateFormat time_in_min = new SimpleDateFormat("yyyy-MM-dd HH:mm EEEE");
+        SimpleDateFormat time_in_hour = new SimpleDateFormat("yyyy-MM-dd HH:00 EEEE");
+        SimpleDateFormat time_in_day = new SimpleDateFormat("yyyy-MM-dd EEEE");
         int lastindex = str.length()-1;
         int num = getNumber(str.substring(0,lastindex));
         char comp = str.charAt(lastindex);
-        if(num > 0 && (comp=='年'||comp=='月'||comp=='日'||comp=='時'||comp=='點'||comp=='分')){
+        if(num > 0 && (comp=='年'||comp=='月'||comp=='日'||comp=='時'||comp=='號'||comp=='點'||comp=='分'||comp=='天')){
             switch (comp){
                 case '年':
-                    calendar.set(calendar.YEAR,num);
+                    calendar.set(Calendar.YEAR,num);
                     break;
                 case '月':
-                    calendar.set(calendar.MONTH,num-1);
+                    calendar.set(Calendar.MONTH,num-1);
                     break;
                 case '日':
-                    calendar.set(calendar.DAY_OF_MONTH,num);
+                    calendar.set(Calendar.DAY_OF_MONTH,num);
                     break;
                 case '號':
-                    calendar.set(calendar.DAY_OF_MONTH,num);
+                    calendar.set(Calendar.DAY_OF_MONTH,num);
                     break;
                 case '時':
                     if(ampm>0){
                         switch (ampm){
                             case 1:
                                 num = num%12;
-                                calendar.set(calendar.AM_PM,Calendar.AM);
-                                calendar.set(calendar.HOUR,num);
+                                calendar.set(Calendar.AM_PM,Calendar.AM);
+                                calendar.set(Calendar.HOUR,num);
                                 break;
                             case 2:
                                 num = num%12;
-                                calendar.set(calendar.AM_PM,Calendar.PM);
-                                calendar.set(calendar.HOUR,num);
+                                calendar.set(Calendar.AM_PM,Calendar.PM);
+                                calendar.set(Calendar.HOUR,num);
                                 break;
                             default:
                                 break;
@@ -128,13 +138,13 @@ public class Text_mining {
                     }
                     else{
                         if(num<12){
-                            calendar.set(calendar.AM_PM,Calendar.AM);
-                            calendar.set(calendar.HOUR,num);
+                            calendar.set(Calendar.AM_PM,Calendar.AM);
+                            calendar.set(Calendar.HOUR,num);
                         }
                         if(num>=12){
                             num = num%12;
-                            calendar.set(calendar.AM_PM,Calendar.PM);
-                            calendar.set(calendar.HOUR,num);
+                            calendar.set(Calendar.AM_PM,Calendar.PM);
+                            calendar.set(Calendar.HOUR,num);
                         }
                     }
                     break;
@@ -143,13 +153,13 @@ public class Text_mining {
                         switch (ampm){
                             case 1:
                                 num = num%12;
-                                calendar.set(calendar.AM_PM,Calendar.AM);
-                                calendar.set(calendar.HOUR,num);
+                                calendar.set(Calendar.AM_PM,Calendar.AM);
+                                calendar.set(Calendar.HOUR,num);
                                 break;
                             case 2:
                                 num = num%12;
-                                calendar.set(calendar.AM_PM,Calendar.PM);
-                                calendar.set(calendar.HOUR,num);
+                                calendar.set(Calendar.AM_PM,Calendar.PM);
+                                calendar.set(Calendar.HOUR,num);
                                 break;
                             default:
                                 break;
@@ -157,21 +167,31 @@ public class Text_mining {
                     }
                     else{
                         if(num<12){
-                            calendar.set(calendar.AM_PM,Calendar.AM);
-                            calendar.set(calendar.HOUR,num);
+                            calendar.set(Calendar.AM_PM,Calendar.AM);
+                            calendar.set(Calendar.HOUR,num);
                         }
                         if(num>=12){
                             num = num%12;
-                            calendar.set(calendar.AM_PM,Calendar.PM);
-                            calendar.set(calendar.HOUR,num);
+                            calendar.set(Calendar.AM_PM,Calendar.PM);
+                            calendar.set(Calendar.HOUR,num);
                         }
                     }
                     break;
                 case '分':
-                    calendar.set(calendar.MINUTE,num);
+                    calendar.set(Calendar.MINUTE,num);
+                    break;
+                case '天':
+                    if(num==2) this.calendar.add(Calendar.DATE,+1);
+                    if(num==3) this.calendar.add(Calendar.DATE,+2);
                     break;
             }
-            return df.format(calendar.getTime());
+            if(calendar.get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY))
+                return time_in_day.format(calendar.getTime());
+            else if(calendar.get(Calendar.MINUTE) == now.get(Calendar.MINUTE)){
+                return time_in_hour.format(calendar.getTime());
+            }else{
+                return time_in_min.format(calendar.getTime());
+            }
         }
         return null;
     }
@@ -181,7 +201,6 @@ public class Text_mining {
      * @param str
      * @return int
      */
-
     private int getNumber(String str){
         String temp = "";
         Pattern pattern = Pattern.compile("[一二三四五六七八九十零百]*");

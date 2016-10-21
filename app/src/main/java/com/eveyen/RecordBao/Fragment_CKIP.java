@@ -27,11 +27,7 @@ public class Fragment_CKIP extends Fragment {
 
     ArrayList<String> inputList = new ArrayList<String>(); //宣告動態陣列 存切詞的name
     ArrayList<String> TagList = new ArrayList<String>();   //宣告動態陣列 存切詞的詞性
-    ArrayList<String> DateList = new ArrayList<String>();
-
-    public Fragment_CKIP() {
-        // Required empty public constructor
-    }
+    String SDate = "";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +45,6 @@ public class Fragment_CKIP extends Fragment {
         return v;
     }
 
-
     public void initListener() {
         OK.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,7 +57,7 @@ public class Fragment_CKIP extends Fragment {
                             text_mining = new Text_mining(teststring);
                             inputList = text_mining.getInputList();
                             TagList = text_mining.getTagList();
-                            DateList = text_mining.getDate();
+                            SDate = text_mining.getDate();
                             updateProHandler.sendEmptyMessage(500);
                         }
                     }.start();
@@ -87,15 +82,13 @@ public class Fragment_CKIP extends Fragment {
                     textView.append("("+TagList.get(i)+")   ");
                 }
                 textView.append("\n");
-                if(DateList.size()!=0) {
-                    textView.append("時間：");
-                    for (int i = 0; i < DateList.size(); i++) {
-                        textView.append(DateList.get(i));
-                    }
-                    textView.append("\n");
-                }
+                textView.append("時間："+SDate);
+                textView.append("\n");
+
             }
         }
     };
+
+
 
 }

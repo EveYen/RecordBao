@@ -53,6 +53,7 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
     String getText = "null";
     String Title = "";
     String Location = "";
+    String Sdate = "";
     ArrayList<String> inputList = new ArrayList<String>(); //宣告動態陣列 存切詞的name
     ArrayList<String> TagList = new ArrayList<String>();   //宣告動態陣列 存切詞的詞性
     ArrayList<String> DateList = new ArrayList<String>();
@@ -199,7 +200,7 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
                         text_mining = new Text_mining(getText); //傳上去CKIP
                         inputList = text_mining.getInputList();
                         TagList = text_mining.getTagList();
-                        DateList = text_mining.getDate();
+                        Sdate = text_mining.getDate();
                         Location = text_mining.getLocation();
 
                         updateProHandler.sendEmptyMessage(500);//這個thread完成才送出訊息給Handler
@@ -224,8 +225,7 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
                     tv_record_trans.append(TagList.get(i));
                     tv_record_trans.append("\n");
                 }
-                //tv_record_trans.append("時間：");
-                //tv_record_trans.append(DateList.get(0));
+                tv_record_trans.append("時間："+Sdate+"\n");
                 Data_Function.saveData(getContext(),Title,getText,voicePath);
             }
         }

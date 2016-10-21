@@ -12,7 +12,15 @@
         android:autoText="false"
         android:background="#c5e8ff"
         android:layout_weight="1" />
-
+    <AutoCompleteTextView
+        android:id="@+id/autocomplete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:hint="輸入地點"
+        android:singleLine="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp" />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
