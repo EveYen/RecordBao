@@ -1,7 +1,6 @@
 package com.eveyen.RecordBao;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -15,8 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 public class Activity_Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,7 +42,6 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
         fragment = new Fragment_Main();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_fragment, fragment).commit();
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     /**
@@ -147,31 +143,5 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_fragment, fragment).commit();
         return true;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW,
-                "Activity_Main Page",
-                Uri.parse("http://host/path"),
-                Uri.parse("android-app://com.eveyen.RecordBao/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW,
-                "Activity_Main Page",
-                Uri.parse("http://host/path"),
-                Uri.parse("android-app://com.eveyen.RecordBao/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
     }
 }

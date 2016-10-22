@@ -38,7 +38,7 @@ public class Text_mining {
         for (Term t : connect.getTerm()) {
             inputList.add(t.getTerm()); // t.getTerm()會讀到斷詞的String，將其存到inputList陣列
             TagList.add(t.getTag());    // t.getTag() 會讀到斷詞的詞性，將其存到TagList陣列
-            DirtyList.add(false);
+            //DirtyList.add(false);
         }
     }
 
