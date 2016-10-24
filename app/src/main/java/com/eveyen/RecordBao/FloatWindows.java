@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 
+import com.eveyen.RecordBao.CKIP.Text_mining;
 import com.eveyen.RecordBao.Tools.Data_Function;
 import com.eveyen.RecordBao.Record.Record_implement;
 import com.eveyen.RecordBao.SQL.SQL_implement;
@@ -27,6 +28,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+
 /**
  *  作者：EveYen
  *  最後修改日期：10/12
@@ -51,6 +54,12 @@ public class FloatWindows extends Service {
     private SQL_implement item;
     String getText = "null";
     String Title = null;
+
+    Text_mining text_mining;
+    String Location = "";
+    String Sdate = "";
+    ArrayList<String> inputList = new ArrayList<String>(); //宣告動態陣列 存切詞的name
+    ArrayList<String> TagList = new ArrayList<String>();   //宣告動態陣列 存切詞的詞性
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -198,6 +207,13 @@ public class FloatWindows extends Service {
                             decodedString += StrTemp;
                         }
                         getText = GoogleSpeech.getTextString(decodedString);
+
+                        text_mining = new Text_mining(getText); //傳上去CKIP
+                        inputList = text_mining.getInputList();
+                        TagList = text_mining.getTagList();
+                        Sdate = text_mining.getDate();
+                        Location = text_mining.getLocation();
+
                         updateProHandler.sendEmptyMessage(500);
                         Log.e("TAG",getText);
                     }catch (IOException ex){
@@ -212,7 +228,7 @@ public class FloatWindows extends Service {
         public void handleMessage(android.os.Message msg) {
             if (msg.what == 500) {
                 Log.e("FloatView",getText);
-                Data_Function.saveData(getBaseContext(),Title,getText,voicePath);
+                Data_Function.saveData(getBaseContext(),Title,getText,voicePath,Sdate);
             }
         }
     };

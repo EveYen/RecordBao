@@ -23,6 +23,9 @@ public class SQL_implement {
     public static final String TITLE_COLUMN = "title";
     public static final String CONTENT_COLUMN = "content";
     public static final String FILENAME_COLUMN = "filename";
+    public static final String SDATE_COLUMN = "sdate";
+    public static final String SLOCA_COLUMN = "sloca";
+    public static final String SCHEDULE_COLUMN = "schedule";
 
     // 使用上面宣告的變數建立表格的SQL指令
     public static final String CREATE_TABLE =
@@ -30,9 +33,12 @@ public class SQL_implement {
                     KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     DATETIME_COLUMN + " INTEGER NOT NULL, " +
                     COLOR_COLUMN + " INTEGER NOT NULL, " +
-                    TITLE_COLUMN + " TEXT, " +
+                    TITLE_COLUMN + " TEXT NOT NULL, " +
                     CONTENT_COLUMN + " TEXT, " +
-                    FILENAME_COLUMN + " TEXT)";
+                    FILENAME_COLUMN + " TEXT, " +
+                    SDATE_COLUMN + " TEXT, "+
+                    SLOCA_COLUMN + " TEXT, "+
+                    SCHEDULE_COLUMN + " TEXT)";
 
     private static SQLiteDatabase db;
 
@@ -56,6 +62,9 @@ public class SQL_implement {
         cv.put(TITLE_COLUMN, item.getTitle());
         cv.put(CONTENT_COLUMN, item.getContent());
         cv.put(FILENAME_COLUMN, item.getFileName());
+        cv.put(SDATE_COLUMN, item.getScheduleDate());
+        cv.put(SLOCA_COLUMN, item.getScheduleLocation());
+        cv.put(SCHEDULE_COLUMN, item.getSchedule());
 
         // 新增一筆資料並取得編號
         // 第一個參數是表格名稱
@@ -134,6 +143,9 @@ public class SQL_implement {
         result.setTitle(cursor.getString(3));
         result.setContent(cursor.getString(4));
         result.setFileName(cursor.getString(5));
+        result.setScheduleDate(cursor.getString(6));
+        result.setScheduleLocation(cursor.getString(7));
+        result.setSchedule(cursor.getString(8));
 
         // 回傳結果
         return result;
@@ -150,10 +162,6 @@ public class SQL_implement {
         }
 
         return result;
-    }
-
-    public void firstCreate(){
-
     }
 
 }

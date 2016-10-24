@@ -226,7 +226,7 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
                 }
                 tv_record_trans.append("\n");
                 tv_record_trans.append("時間："+Sdate+"\n");
-                Data_Function.saveData(getContext(),Title,getText,voicePath);
+                Data_Function.saveData(getContext(),Title,getText,voicePath,Sdate);
             }
         }
     };

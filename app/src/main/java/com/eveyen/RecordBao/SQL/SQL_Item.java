@@ -12,8 +12,9 @@ public class SQL_Item {
     private String title;
     private String content;
     private String fileName;
-    private long lastModify;
-    private boolean selected;
+    private String scheduleDate;
+    private String scheduleLocation;
+    private String schedule;
 
     public SQL_Item() {
         title = "";
@@ -22,14 +23,16 @@ public class SQL_Item {
     }
 
     public SQL_Item(long id, long datetime, int color, String title,
-                    String content, String fileName, long lastModify) {
+                    String content, String fileName ,String sdate ,String sloca ,String sche) {
         this.id = id;
         this.datetime = datetime;
         this.color = color;
         this.title = title;
         this.content = content;
         this.fileName = fileName;
-        this.lastModify = lastModify;
+        this.scheduleDate = sdate;
+        this.scheduleLocation = sloca;
+        this.schedule = sche;
     }
 
     public long getId() {
@@ -78,6 +81,30 @@ public class SQL_Item {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    public String getScheduleDate() {
+        return scheduleDate;
+    }
+
+    public void setScheduleDate(String Sdate) {
+        this.scheduleDate = Sdate;
+    }
+
+    public String getScheduleLocation() {
+        return scheduleLocation;
+    }
+
+    public void setScheduleLocation(String Sloca) {
+        this.scheduleLocation = Sloca;
+    }
+
+    public String getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(String Sche) {
+        this.schedule = Sche;
     }
 
 }

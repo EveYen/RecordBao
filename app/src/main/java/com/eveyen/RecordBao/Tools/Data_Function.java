@@ -26,35 +26,6 @@ public class Data_Function {
     private static List<File> list = new ArrayList<File>();
     private static SQL_implement item;
 
-    public static List<File> search(File file, String[] ext) {
-        list.clear();
-        searchFile(file, ext);
-        return list;
-    }
-    private static void searchFile(File file, String[] ext) {
-        if (file != null) {
-            if (file.isDirectory()) {//檢查是否是目錄
-                File[] listFile = file.listFiles();// listFiles()把目前所有的檔案都列出來
-                if (listFile != null) {
-                    for (int i = 0; i < listFile.length; i++) {
-                        if (file.canRead()) {
-                            searchFile(listFile[i], ext);//因是資料夾所以要往下找
-                        }
-                    }
-                }
-            } else {
-                String filename = file.getAbsolutePath();
-                // file.getName();// 加入名稱
-                // file.getPath();// 加入路徑
-                // file.length(); // 加入文件大小
-                for (int i = 0; i < ext.length; i++) {
-                    if (filename.endsWith(ext[i])) {
-                        list.add(file);
-                    }
-                }
-            }
-        }
-    }
     public static String getRootPath() {
 
         String rootPath = "/WAV/";
@@ -98,11 +69,11 @@ public class Data_Function {
         return voicePath;
     }
 
-    public static void saveData(Context c,String Title, String getText, String voicePath){
+    public static void saveData(Context c,String Title, String getText, String voicePath,String sdate){
         int[] colorset={Color.argb(180,255,166,188),Color.argb(180,169,145,255),Color.argb(180,135,165,255),Color.argb(180,255,230,103),Color.argb(180,138,255,144),Color.argb(180,255,171,107)};
         int r = (int)(Math.random()*6);
         item = new SQL_implement(c);
-        SQL_Item temp = new SQL_Item(0, new Date().getTime(), colorset[r], Title, getText, voicePath, 0);
+        SQL_Item temp = new SQL_Item(0, new Date().getTime(), colorset[r], Title, getText, voicePath, sdate, "", "");
         item.insert(temp);
     }
 }
