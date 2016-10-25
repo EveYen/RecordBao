@@ -227,7 +227,6 @@ public class FloatWindows extends Service {
     Handler updateProHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             if (msg.what == 500) {
-                Log.e("FloatView",getText);
                 Data_Function.saveData(getBaseContext(),Title,getText,voicePath,Sdate);
             }
         }

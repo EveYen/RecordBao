@@ -14,5 +14,9 @@
             android:id="@+id/nav_ckip"
             android:icon="@drawable/ic_nav_info"
             android:title="" />
+        <item
+            android:id="@+id/nav_map"
+            android:icon="@drawable/ic_nav_map"
+            android:title="" />
     </group>
 </menu>

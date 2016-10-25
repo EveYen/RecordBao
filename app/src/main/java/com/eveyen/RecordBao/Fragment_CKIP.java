@@ -1,6 +1,5 @@
 package com.eveyen.RecordBao;
 
-
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -15,16 +14,18 @@ import com.eveyen.RecordBao.CKIP.Text_mining;
 
 import java.util.ArrayList;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class Fragment_CKIP extends Fragment {
+    /**
+     * init View element
+     */
     private View v;
     private EditText editText;
     private TextView textView;
     private Button OK, Clear;
+    /**
+     * text mining element
+     */
     Text_mining text_mining;
-
     ArrayList<String> inputList = new ArrayList<String>(); //宣告動態陣列 存切詞的name
     ArrayList<String> TagList = new ArrayList<String>();   //宣告動態陣列 存切詞的詞性
     String SDate = "";
@@ -37,12 +38,17 @@ public class Fragment_CKIP extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_ckip, container, false);
+        initView();
+        initListener();
+        return v;
+    }
+
+
+    public void initView(){
         editText = (EditText) v.findViewById(R.id.test_input);
         OK = (Button) v.findViewById(R.id.test_btn);
         Clear = (Button) v.findViewById(R.id.test_clear);
         textView = (TextView) v.findViewById(R.id.test_output);
-        initListener();
-        return v;
     }
 
     public void initListener() {
@@ -88,7 +94,4 @@ public class Fragment_CKIP extends Fragment {
             }
         }
     };
-
-
-
 }

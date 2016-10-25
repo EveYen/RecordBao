@@ -133,6 +133,10 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
                 fragment = new Fragment_CKIP();
                 toolbar.setTitle("CKIP Test");
                 break;
+            case R.id.nav_map:
+                fragment = new Fragment_Map();
+                toolbar.setTitle("Map Test");
+                break;
             default:
                 break;
         }

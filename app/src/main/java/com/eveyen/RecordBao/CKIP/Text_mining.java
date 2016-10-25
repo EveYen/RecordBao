@@ -1,7 +1,5 @@
 package com.eveyen.RecordBao.CKIP;
 
-import android.util.Log;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -26,6 +24,7 @@ public class Text_mining {
     public Text_mining(String textString){
         inputList = new ArrayList<String>(); //宣告動態陣列 存切詞的name
         TagList = new ArrayList<String>();
+        DirtyList = new ArrayList<Boolean>();
         String CKIP_IP = "140.109.19.104";
         int CKIP_PORT = 1501;
         String CKIP_USERNAME = "eve223267";
@@ -38,7 +37,7 @@ public class Text_mining {
         for (Term t : connect.getTerm()) {
             inputList.add(t.getTerm()); // t.getTerm()會讀到斷詞的String，將其存到inputList陣列
             TagList.add(t.getTag());    // t.getTag() 會讀到斷詞的詞性，將其存到TagList陣列
-            //DirtyList.add(false);
+            DirtyList.add(false);
         }
     }
 
@@ -58,7 +57,7 @@ public class Text_mining {
         calendar = Calendar.getInstance();
         now = Calendar.getInstance();
         String datestr = "";
-        int AM_PM = -1; //凌晨＝1;早上＝1，上午＝1，中午＝2，下午＝2，傍晚＝2，晚上＝2
+        int AM_PM = -1;//凌晨＝1;早上＝1，上午＝1，中午＝2，下午＝2，傍晚＝2，晚上＝2
         for(int i = 0;i<TagList.size();i++){
             String token = inputList.get(i);
             String tag = TagList.get(i);
@@ -68,7 +67,6 @@ public class Text_mining {
                 if(token.equals("今天")) datestr = testDateFormat("1天", calendar, now, AM_PM);
                 if(token.equals("明天")) datestr = testDateFormat("2天", calendar, now, AM_PM);
                 if(token.equals("後天")) datestr = testDateFormat("3天", calendar, now, AM_PM);
-
             }
             if(tag.equals("POST")){
                 if(token.equals("半"))
@@ -220,7 +218,6 @@ public class Text_mining {
                 }
             }
             if(!temp.equals("")){
-                Log.e("Number",temp);
                 return Integer.parseInt(temp);
             }
         }
