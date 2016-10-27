@@ -42,6 +42,7 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
         fragment = new Fragment_Main();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_fragment, fragment).commit();
+
     }
 
     /**

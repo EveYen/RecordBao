@@ -26,6 +26,7 @@ public class SQL_implement {
     public static final String SDATE_COLUMN = "sdate";
     public static final String SLOCA_COLUMN = "sloca";
     public static final String SCHEDULE_COLUMN = "schedule";
+    public static final String CONTACT_COLUMN = "contact";
 
     // 使用上面宣告的變數建立表格的SQL指令
     public static final String CREATE_TABLE =
@@ -38,7 +39,8 @@ public class SQL_implement {
                     FILENAME_COLUMN + " TEXT, " +
                     SDATE_COLUMN + " TEXT, "+
                     SLOCA_COLUMN + " TEXT, "+
-                    SCHEDULE_COLUMN + " TEXT)";
+                    SCHEDULE_COLUMN + " TEXT, "+
+                    CONTACT_COLUMN + " TEXT)";
 
     private static SQLiteDatabase db;
 
@@ -65,6 +67,7 @@ public class SQL_implement {
         cv.put(SDATE_COLUMN, item.getScheduleDate());
         cv.put(SLOCA_COLUMN, item.getScheduleLocation());
         cv.put(SCHEDULE_COLUMN, item.getSchedule());
+        cv.put(CONTACT_COLUMN,item.getContact());
 
         // 新增一筆資料並取得編號
         // 第一個參數是表格名稱
@@ -146,6 +149,7 @@ public class SQL_implement {
         result.setScheduleDate(cursor.getString(6));
         result.setScheduleLocation(cursor.getString(7));
         result.setSchedule(cursor.getString(8));
+        result.setContact(cursor.getString(9));
 
         // 回傳結果
         return result;

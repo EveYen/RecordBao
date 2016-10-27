@@ -1,11 +1,17 @@
 package com.eveyen.RecordBao;
 
 import android.app.Service;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.SystemClock;
+import android.provider.ContactsContract;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -17,9 +23,9 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 
 import com.eveyen.RecordBao.CKIP.Text_mining;
-import com.eveyen.RecordBao.Tools.Data_Function;
 import com.eveyen.RecordBao.Record.Record_implement;
 import com.eveyen.RecordBao.SQL.SQL_implement;
+import com.eveyen.RecordBao.Tools.Data_Function;
 import com.eveyen.RecordBao.Tools.GoogleSpeech;
 
 import java.io.BufferedReader;
@@ -56,8 +62,9 @@ public class FloatWindows extends Service {
     String Title = null;
 
     Text_mining text_mining;
-    String Location = "";
+    String Sloca = "";
     String Sdate = "";
+    String Sche = "";
     String Person = null;
     ArrayList<String> inputList = new ArrayList<String>(); //宣告動態陣列 存切詞的name
     ArrayList<String> TagList = new ArrayList<String>();   //宣告動態陣列 存切詞的詞性
@@ -82,6 +89,13 @@ public class FloatWindows extends Service {
         layoutView = inflater.inflate(R.layout.floatwindows, null); // 取得layout
         windowManager.addView(layoutView, params);
 
+        //電話狀態的Listener
+        MyPhoneStateListener myPhoneStateListener = new MyPhoneStateListener();
+        //取得TelephonyManager
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        //將電話狀態的Listener加到取得TelephonyManager
+        telephonyManager.listen(myPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+
         final ImageButton button = (ImageButton) layoutView
                 .findViewById(R.id.float_imgb); // 取得圖片按鈕
         button.setBackgroundResource(R.drawable.microphone);
@@ -100,6 +114,7 @@ public class FloatWindows extends Service {
                     }
 
                 } catch (Exception ex) {
+
                 }
             }
         };
@@ -213,8 +228,8 @@ public class FloatWindows extends Service {
                         inputList = text_mining.getInputList();
                         TagList = text_mining.getTagList();
                         Sdate = text_mining.getDate();
-                        Location = text_mining.getLocation();
-                        Person = text_mining.getPerson();
+                        Sloca = text_mining.getLocation();
+                        //Person = text_mining.getPerson();
                         updateProHandler.sendEmptyMessage(500);
                         Log.e("TAG",getText);
                     }catch (IOException ex){
@@ -228,7 +243,7 @@ public class FloatWindows extends Service {
     Handler updateProHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             if (msg.what == 500) {
-                Data_Function.saveData(getBaseContext(),Title,getText,voicePath,Sdate);
+                Data_Function.saveData(getBaseContext(), Title, getText, voicePath, Sdate, Sloca, Sche, Person);
             }
         }
     };
@@ -237,5 +252,54 @@ public class FloatWindows extends Service {
     public void onDestroy() {
         super.onDestroy();
         windowManager.removeView(layoutView);
+    }
+
+    public class MyPhoneStateListener extends PhoneStateListener {
+        @Override
+        public void onCallStateChanged(int state, String phoneNumber) {
+            switch (state) {
+                //電話狀態是閒置的
+                case TelephonyManager.CALL_STATE_IDLE:
+                    break;
+                //電話狀態是接起的
+                case TelephonyManager.CALL_STATE_OFFHOOK:
+                    ArrayList<String[]> contact = getContactsName();
+                    for(int j=0;j < contact.size();j++){
+                        if(phoneNumber.equals(contact.get(j)[1])){
+                            Person = contact.get(j)[0];
+                        }
+                    }
+                    //Toast.makeText(getBaseContext(), Person, Toast.LENGTH_SHORT).show();
+                    break;
+                //電話狀態是響起的
+                case TelephonyManager.CALL_STATE_RINGING:
+                    break;
+                default:
+                    break;
+            }
+            super.onCallStateChanged(state, phoneNumber);
+        }
+
+    }
+
+    public ArrayList<String[]> getContactsName() {
+        ArrayList<String[]> contactinfo = new ArrayList<>();
+        ContentResolver contentResolver = getContentResolver();  //取得內容解析器
+        //取得所有聯絡人
+        Cursor contact_NAME = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        while (contact_NAME.moveToNext()) {
+            String[] contacts = new String[2];
+            long id = contact_NAME.getLong(contact_NAME.getColumnIndex(ContactsContract.Contacts._ID));//取的名字ID
+            Cursor contact_NUM = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + Long.toString(id), null, null); //利用ID搜尋號碼
+            while (contact_NUM.moveToNext()) {
+                contacts[1] = contact_NUM.getString(contact_NUM.getColumnIndex(
+                        ContactsContract.CommonDataKinds.Phone.NUMBER)).replace(" ","");
+            }
+            contact_NUM.close();
+            contacts[0] = contact_NAME.getString(contact_NAME.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+            contactinfo.add(contacts);
+        }
+        return contactinfo;
     }
 }

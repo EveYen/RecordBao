@@ -15,6 +15,7 @@ public class SQL_Item {
     private String scheduleDate;
     private String scheduleLocation;
     private String schedule;
+    private String contact;
 
     public SQL_Item() {
         title = "";
@@ -23,7 +24,7 @@ public class SQL_Item {
     }
 
     public SQL_Item(long id, long datetime, int color, String title,
-                    String content, String fileName ,String sdate ,String sloca ,String sche) {
+                    String content, String fileName ,String sdate ,String sloca ,String sche ,String cont) {
         this.id = id;
         this.datetime = datetime;
         this.color = color;
@@ -33,6 +34,7 @@ public class SQL_Item {
         this.scheduleDate = sdate;
         this.scheduleLocation = sloca;
         this.schedule = sche;
+        this.contact = cont;
     }
 
     public long getId() {
@@ -106,5 +108,14 @@ public class SQL_Item {
     public void setSchedule(String Sche) {
         this.schedule = Sche;
     }
+
+    public String getContact() {
+        return contact;
+    }
+
+    public void setContact(String cont) {
+        this.contact = cont;
+    }
+
 
 }

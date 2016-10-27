@@ -68,7 +68,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         lv_note.setBackgroundColor(temp.getColor());
         String[] stitle=temp.getTitle().split("_");
         tv_title.setText(stitle[1]+"/"+stitle[2]+"   "+stitle[3]+":"+stitle[4]+":"+stitle[5].split(".wav")[0]);
-        tv_content.setText(temp.getScheduleDate() + "\n" + temp.getContent());
+        tv_content.setText("時間："+temp.getScheduleDate() + "\n與："+ temp.getContact() +"\n"+ temp.getContent());
         //tv_time.setText(Long.toString(temp.getDatetime()));
     }
 

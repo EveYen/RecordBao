@@ -29,7 +29,7 @@ public class Fragment_CKIP extends Fragment {
     ArrayList<String> inputList = new ArrayList<String>(); //宣告動態陣列 存切詞的name
     ArrayList<String> TagList = new ArrayList<String>();   //宣告動態陣列 存切詞的詞性
     ArrayList<Boolean> DoneList = new ArrayList<Boolean>();
-    ArrayList<String> Contact = new ArrayList<String>();
+    ArrayList<String[]> Contact = new ArrayList<String[]>();
     String SDate = "";
     String Person = null;
 
@@ -69,7 +69,7 @@ public class Fragment_CKIP extends Fragment {
                             DoneList = text_mining.getDoneList();
                             SDate = text_mining.getDate();
                             Person = text_mining.getPerson();
-                            //Contact = text_mining.getContactsName();
+                            Contact = text_mining.getContactsName();
                             updateProHandler.sendEmptyMessage(500);
                         }
                     }.start();
@@ -103,9 +103,9 @@ public class Fragment_CKIP extends Fragment {
                     textView.append("與："+ Person);
                     textView.append("\n");
                 }
-                //for(int j=0;j<Contact.size();j++){
-                //    textView.append(Contact.get(j)+"/");
-                //}
+                for(int j=0;j<Contact.size();j++){
+                    textView.append(Contact.get(j)[0]+"/" + Contact.get(j)[1]+"\n");
+                }
             }
         }
     };

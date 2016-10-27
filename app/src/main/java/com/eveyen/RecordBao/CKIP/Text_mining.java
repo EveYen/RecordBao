@@ -3,7 +3,7 @@ package com.eveyen.RecordBao.CKIP;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.provider.Contacts;
+import android.provider.ContactsContract;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 
@@ -338,14 +338,14 @@ public class Text_mining {
     }
 
     public String getPerson(){
-        //電話狀態的Listener
+        /*//電話狀態的Listener
         MyPhoneStateListener myPhoneStateListener = new MyPhoneStateListener();
         //取得TelephonyManager
         TelephonyManager telephonyManager = (TelephonyManager) mcontext.getSystemService(Context.TELEPHONY_SERVICE);
         //將電話狀態的Listener加到取得TelephonyManager
-        telephonyManager.listen(myPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        telephonyManager.listen(myPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);*/
 
-       /*ArrayList<String[]> contact = getContactsName();
+       ArrayList<String[]> contact = getContactsName();
         for(int i = 0;i<TagList.size();i++){
             if(TagList.get(i).equals("N") && DoneList.get(i).equals(false)){
                 String token = inputList.get(i);
@@ -355,25 +355,26 @@ public class Text_mining {
                     }
                 }
             }
-        }*/
+        }
         return contactName;
     }
 
     public ArrayList<String[]> getContactsName() {
         ArrayList<String[]> contactinfo = new ArrayList<>();
-        //取得內容解析器
-        ContentResolver contentResolver = mcontext.getContentResolver();
-        //設定你要從電話簿取出的欄位
-        String[] projection = new String[]{Contacts.People.NAME,Contacts.People.NUMBER};
+        ContentResolver contentResolver = mcontext.getContentResolver();  //取得內容解析器
         //取得所有聯絡人
-        Cursor cursor = contentResolver.query(Contacts.People.CONTENT_URI, projection, null, null, Contacts.People.DEFAULT_SORT_ORDER);
-        String[] contacts = new String[2];
-        for (int i = 0; i < cursor.getCount(); i++) {
-            //移到指定位置
-            cursor.moveToPosition(i);
-            contacts[0] = cursor.getString(0);
-            contacts[1] = cursor.getString(1);
-            //取得第一個欄位
+        Cursor contact_NAME = contentResolver.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        while (contact_NAME.moveToNext()) {
+            String[] contacts = new String[2];
+            long id = contact_NAME.getLong(contact_NAME.getColumnIndex(ContactsContract.Contacts._ID));//取的名字ID
+            Cursor contact_NUM = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=" + Long.toString(id), null, null); //利用ID搜尋號碼
+            while (contact_NUM.moveToNext()) {
+                contacts[1] = contact_NUM.getString(contact_NUM.getColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER)).replace(" ","");
+            }
+            contact_NUM.close();
+            contacts[0] = contact_NAME.getString(contact_NAME.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
             contactinfo.add(contacts);
         }
         return contactinfo;
@@ -401,7 +402,9 @@ public class Text_mining {
                 default:
                     break;
             }
+            super.onCallStateChanged(state, phoneNumber);
         }
+
     }
 
 }
