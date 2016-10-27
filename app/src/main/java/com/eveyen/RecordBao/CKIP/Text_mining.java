@@ -1,5 +1,12 @@
 package com.eveyen.RecordBao.CKIP;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
+import android.provider.Contacts;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,16 +22,22 @@ import tw.cheyingwu.ckip.Term;
  *  完成功能：CKIP
  */
 public class Text_mining {
-
+    private Context mcontext;
     static ArrayList<String> inputList; //宣告動態陣列 存切詞的name
     static ArrayList<String> TagList;   //宣告動態陣列 存切詞的詞性
-    static ArrayList<Boolean> DirtyList;   //宣告動態陣列 確認是否已經分析過
+    static ArrayList<Boolean> DoneList;   //宣告動態陣列 確認是否已經分析過
     Calendar calendar,now;
+    SimpleDateFormat time_in_min = new SimpleDateFormat("yyyy-MM-dd HH:mm EEEE");
+    SimpleDateFormat time_in_hour = new SimpleDateFormat("yyyy-MM-dd HH:00 EEEE");
+    SimpleDateFormat time_in_day = new SimpleDateFormat("yyyy-MM-dd EEEE");
 
-    public Text_mining(String textString){
+    String contactName = null;
+
+    public Text_mining(Context context,String textString){
+        mcontext =context;
         inputList = new ArrayList<String>(); //宣告動態陣列 存切詞的name
         TagList = new ArrayList<String>();
-        DirtyList = new ArrayList<Boolean>();
+        DoneList = new ArrayList<Boolean>();
         String CKIP_IP = "140.109.19.104";
         int CKIP_PORT = 1501;
         String CKIP_USERNAME = "eve223267";
@@ -37,7 +50,7 @@ public class Text_mining {
         for (Term t : connect.getTerm()) {
             inputList.add(t.getTerm()); // t.getTerm()會讀到斷詞的String，將其存到inputList陣列
             TagList.add(t.getTag());    // t.getTag() 會讀到斷詞的詞性，將其存到TagList陣列
-            DirtyList.add(false);
+            DoneList.add(false);
         }
     }
 
@@ -49,6 +62,10 @@ public class Text_mining {
         return TagList;
     }
 
+    public ArrayList<Boolean> getDoneList(){
+        return DoneList;
+    }
+
     /**
      * 找名詞內含有(中英)數字＋年月日
      *
@@ -56,34 +73,56 @@ public class Text_mining {
     public String getDate(){
         calendar = Calendar.getInstance();
         now = Calendar.getInstance();
-        String datestr = "";
+        String datestr = time_in_min.format(now.getTime());
         int AM_PM = -1;//凌晨＝1;早上＝1，上午＝1，中午＝2，下午＝2，傍晚＝2，晚上＝2
         for(int i = 0;i<TagList.size();i++){
             String token = inputList.get(i);
             String tag = TagList.get(i);
             if(tag.equals("N")){
-                if(token.equals("早上")||token.equals("凌晨")||token.equals("上午")||token.equals("清早")) AM_PM = 1;
-                if(token.equals("中午")||token.equals("下午")||token.equals("傍晚")||token.equals("晚上")) AM_PM = 2;
-                if(token.equals("今天")) datestr = testDateFormat("1天", calendar, now, AM_PM);
-                if(token.equals("明天")) datestr = testDateFormat("2天", calendar, now, AM_PM);
-                if(token.equals("後天")) datestr = testDateFormat("3天", calendar, now, AM_PM);
+                if(token.equals("早上")||token.equals("凌晨")||token.equals("上午")||token.equals("清早")) {
+                    AM_PM = 1;
+                    DoneList.set(i ,true);
+                }
+                if(token.equals("中午")||token.equals("下午")||token.equals("傍晚")||token.equals("晚上")) {
+                    AM_PM = 2;
+                    DoneList.set(i ,true);
+                }
+                if(token.equals("今天")) {
+                    datestr = testDateFormat("1天", calendar, now, AM_PM);
+                    DoneList.set(i ,true);
+                }
+                if(token.equals("明天")) {
+                    datestr = testDateFormat("2天", calendar, now, AM_PM);
+                    DoneList.set(i ,true);
+                }
+                if(token.equals("後天")) {
+                    datestr = testDateFormat("3天", calendar, now, AM_PM);
+                    DoneList.set(i ,true);
+                }
             }
             if(tag.equals("POST")){
-                if(token.equals("半"))
+                if(token.equals("半")) {
                     datestr = testDateFormat("30分", calendar, now, AM_PM);
+                    DoneList.set(i ,true);
+                }
             }
             if(tag.equals("N") && testDateFormat(token, calendar, now, AM_PM)!=null){ //CKIP解析成名詞
                 datestr = testDateFormat(token, calendar, now, AM_PM);
+                DoneList.set(i ,true);
             }
             if(tag.equals("DET")&& i<TagList.size()-1) {//CKIP解析成名詞
                 if(inputList.get(i + 1).equals("號")||inputList.get(i + 1).equals("分")||inputList.get(i + 1).equals("點")){
                     if(token.indexOf('點')>0){
                         datestr = testDateFormat(token.split("點")[0]+"點", calendar, now, AM_PM);
                         datestr = testDateFormat(token.split("點")[1]+inputList.get(i+1), calendar, now, AM_PM);
+                        DoneList.set(i ,true);
+                        DoneList.set(i+1 ,true);
                     }
                     else {
                         token+=inputList.get(i+1);
                         datestr = testDateFormat(token, calendar, now, AM_PM);
+                        DoneList.set(i ,true);
+                        DoneList.set(i+1 ,true);
                     }
                 }
             }
@@ -97,9 +136,6 @@ public class Text_mining {
      * @return 日期
      */
     public String testDateFormat(String str, Calendar calendar,  Calendar now, int ampm){
-        SimpleDateFormat time_in_min = new SimpleDateFormat("yyyy-MM-dd HH:mm EEEE");
-        SimpleDateFormat time_in_hour = new SimpleDateFormat("yyyy-MM-dd HH:00 EEEE");
-        SimpleDateFormat time_in_day = new SimpleDateFormat("yyyy-MM-dd EEEE");
         int lastindex = str.length()-1;
         int num = getNumber(str.substring(0,lastindex));
         char comp = str.charAt(lastindex);
@@ -300,4 +336,72 @@ public class Text_mining {
         }
         return "";
     }
+
+    public String getPerson(){
+        //電話狀態的Listener
+        MyPhoneStateListener myPhoneStateListener = new MyPhoneStateListener();
+        //取得TelephonyManager
+        TelephonyManager telephonyManager = (TelephonyManager) mcontext.getSystemService(Context.TELEPHONY_SERVICE);
+        //將電話狀態的Listener加到取得TelephonyManager
+        telephonyManager.listen(myPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+
+       /*ArrayList<String[]> contact = getContactsName();
+        for(int i = 0;i<TagList.size();i++){
+            if(TagList.get(i).equals("N") && DoneList.get(i).equals(false)){
+                String token = inputList.get(i);
+                for(int j=0;j < contact.size();j++){
+                    if(token.equals(contact.get(j)[0])){
+                        return token;
+                    }
+                }
+            }
+        }*/
+        return contactName;
+    }
+
+    public ArrayList<String[]> getContactsName() {
+        ArrayList<String[]> contactinfo = new ArrayList<>();
+        //取得內容解析器
+        ContentResolver contentResolver = mcontext.getContentResolver();
+        //設定你要從電話簿取出的欄位
+        String[] projection = new String[]{Contacts.People.NAME,Contacts.People.NUMBER};
+        //取得所有聯絡人
+        Cursor cursor = contentResolver.query(Contacts.People.CONTENT_URI, projection, null, null, Contacts.People.DEFAULT_SORT_ORDER);
+        String[] contacts = new String[2];
+        for (int i = 0; i < cursor.getCount(); i++) {
+            //移到指定位置
+            cursor.moveToPosition(i);
+            contacts[0] = cursor.getString(0);
+            contacts[1] = cursor.getString(1);
+            //取得第一個欄位
+            contactinfo.add(contacts);
+        }
+        return contactinfo;
+    }
+
+    public class MyPhoneStateListener extends PhoneStateListener {
+        @Override
+        public void onCallStateChanged(int state, String phoneNumber) {
+            switch (state) {
+                //電話狀態是閒置的
+                case TelephonyManager.CALL_STATE_IDLE:
+                    break;
+                //電話狀態是接起的
+                case TelephonyManager.CALL_STATE_OFFHOOK:
+                    ArrayList<String[]> contact = getContactsName();
+                    for(int j=0;j < contact.size();j++){
+                        if(phoneNumber.equals(contact.get(j)[1])){
+                            contactName = contact.get(j)[0];
+                        }
+                    }
+                    break;
+                //電話狀態是響起的
+                case TelephonyManager.CALL_STATE_RINGING:
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
 }

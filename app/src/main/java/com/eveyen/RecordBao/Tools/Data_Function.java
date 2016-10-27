@@ -69,7 +69,7 @@ public class Data_Function {
         return voicePath;
     }
 
-    public static void saveData(Context c,String Title, String getText, String voicePath,String sdate){
+    public static void saveData(Context c,String Title, String getText, String voicePath, String sdate){
         int[] colorset={Color.argb(180,255,166,188),Color.argb(180,169,145,255),Color.argb(180,135,165,255),Color.argb(180,255,230,103),Color.argb(180,138,255,144),Color.argb(180,255,171,107)};
         int r = (int)(Math.random()*6);
         item = new SQL_implement(c);

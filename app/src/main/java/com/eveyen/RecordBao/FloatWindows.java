@@ -58,6 +58,7 @@ public class FloatWindows extends Service {
     Text_mining text_mining;
     String Location = "";
     String Sdate = "";
+    String Person = null;
     ArrayList<String> inputList = new ArrayList<String>(); //宣告動態陣列 存切詞的name
     ArrayList<String> TagList = new ArrayList<String>();   //宣告動態陣列 存切詞的詞性
 
@@ -208,12 +209,12 @@ public class FloatWindows extends Service {
                         }
                         getText = GoogleSpeech.getTextString(decodedString);
 
-                        text_mining = new Text_mining(getText); //傳上去CKIP
+                        text_mining = new Text_mining(getBaseContext(), getText); //傳上去CKIP
                         inputList = text_mining.getInputList();
                         TagList = text_mining.getTagList();
                         Sdate = text_mining.getDate();
                         Location = text_mining.getLocation();
-
+                        Person = text_mining.getPerson();
                         updateProHandler.sendEmptyMessage(500);
                         Log.e("TAG",getText);
                     }catch (IOException ex){

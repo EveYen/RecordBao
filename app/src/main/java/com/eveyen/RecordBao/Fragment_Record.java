@@ -54,6 +54,7 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
     String Title = "";
     String Location = "";
     String Sdate = "";
+    String Person = "";
     ArrayList<String> inputList = new ArrayList<String>(); //宣告動態陣列 存切詞的name
     ArrayList<String> TagList = new ArrayList<String>();   //宣告動態陣列 存切詞的詞性
     ArrayList<String> DateList = new ArrayList<String>();
@@ -197,11 +198,12 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
                         }
                         getText = GoogleSpeech.getTextString(decodedString);//解析資料
 
-                        text_mining = new Text_mining(getText); //傳上去CKIP
+                        text_mining = new Text_mining(getContext(),getText); //傳上去CKIP
                         inputList = text_mining.getInputList();
                         TagList = text_mining.getTagList();
                         Sdate = text_mining.getDate();
                         Location = text_mining.getLocation();
+                        //Person = text_mining.getPerson();
 
                         updateProHandler.sendEmptyMessage(500);//這個thread完成才送出訊息給Handler
                         Log.e("TAG",getText);
@@ -219,13 +221,13 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
     Handler updateProHandler = new Handler() {
         public void handleMessage(android.os.Message msg) {
             if (msg.what == 500) {
-                //tv_record_trans.append("時間：");
                 for(int i=0;i<inputList.size();i++){
                     tv_record_trans.append(inputList.get(i));
                     tv_record_trans.append("("+TagList.get(i)+")  ");
                 }
                 tv_record_trans.append("\n");
                 tv_record_trans.append("時間："+Sdate+"\n");
+                //if(!Person.isEmpty()) tv_record_trans.append("\n與："+ Person);
                 Data_Function.saveData(getContext(),Title,getText,voicePath,Sdate);
             }
         }

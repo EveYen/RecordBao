@@ -42,10 +42,8 @@ public class Fragment_Map extends Fragment implements GoogleApiClient.OnConnecti
 
     private TextView mPlaceDetailsText;
 
-    private TextView mPlaceDetailsAttribution;
-
     private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(
-            new LatLng(-34.041458, 150.790100), new LatLng(-33.682247, 151.383362));
+            new LatLng(-25, 120), new LatLng(-22, 122));
 
     private static String TAG = "MAP";
 
@@ -67,7 +65,6 @@ public class Fragment_Map extends Fragment implements GoogleApiClient.OnConnecti
         mAutocompleteView = (AutoCompleteTextView) v.findViewById(R.id.autocomplete_places);
         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
         mPlaceDetailsText = (TextView) v.findViewById(R.id.place_details);
-        mPlaceDetailsAttribution = (TextView) v.findViewById(R.id.place_attribution);
 
         mAdapter = new PlaceAutocompleteAdapter(getContext(), mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
         mAutocompleteView.setAdapter(mAdapter);
@@ -83,8 +80,7 @@ public class Fragment_Map extends Fragment implements GoogleApiClient.OnConnecti
         return v;
     }
 
-    private AdapterView.OnItemClickListener mAutocompleteClickListener
-            = new AdapterView.OnItemClickListener() {
+    private AdapterView.OnItemClickListener mAutocompleteClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             /*
@@ -102,8 +98,7 @@ public class Fragment_Map extends Fragment implements GoogleApiClient.OnConnecti
              Issue a request to the Places Geo Data API to retrieve a Place object with additional
              details about the place.
               */
-            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi
-                    .getPlaceById(mGoogleApiClient, placeId);
+            PendingResult<PlaceBuffer> placeResult = Places.GeoDataApi.getPlaceById(mGoogleApiClient, placeId);
             placeResult.setResultCallback(mUpdatePlaceDetailsCallback);
 
             Toast.makeText(getActivity(), "Clicked: " + primaryText, Toast.LENGTH_SHORT).show();
@@ -111,8 +106,7 @@ public class Fragment_Map extends Fragment implements GoogleApiClient.OnConnecti
         }
     };
 
-    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback
-            = new ResultCallback<PlaceBuffer>() {
+    private ResultCallback<PlaceBuffer> mUpdatePlaceDetailsCallback = new ResultCallback<PlaceBuffer>() {
 
         public void onResult(PlaceBuffer places) {
             if (!places.getStatus().isSuccess()) {
@@ -129,34 +123,30 @@ public class Fragment_Map extends Fragment implements GoogleApiClient.OnConnecti
                     place.getId(), place.getAddress(), place.getPhoneNumber(),
                     place.getWebsiteUri()));
 
-            // Display the third party attributions if set.
-            final CharSequence thirdPartyAttribution = places.getAttributions();
-            if (thirdPartyAttribution == null) {
-                mPlaceDetailsAttribution.setVisibility(View.GONE);
-            } else {
-                mPlaceDetailsAttribution.setVisibility(View.VISIBLE);
-                mPlaceDetailsAttribution.setText(Html.fromHtml(thirdPartyAttribution.toString()));
-            }
-
             Log.i(TAG, "Place details received: " + place.getName());
 
             places.release();
         }
     };
 
-    private static Spanned formatPlaceDetails(android.content.res.Resources res, CharSequence name, String id,
-                                              CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
-        Log.e(TAG, res.getString(R.string.place_details, name, id, address, phoneNumber,
-                websiteUri));
-        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber,
-                websiteUri));
-
+    /**
+     * 把資訊從html格式轉為一般格式
+     * @param res
+     * @param name
+     * @param id
+     * @param address
+     * @param phoneNumber
+     * @param websiteUri
+     * @return
+     */
+    private static Spanned formatPlaceDetails(android.content.res.Resources res, CharSequence name, String id, CharSequence address, CharSequence phoneNumber, Uri websiteUri) {
+        Log.e(TAG, res.getString(R.string.place_details, name, id, address, phoneNumber, websiteUri));//html格式的string
+        return Html.fromHtml(res.getString(R.string.place_details, name, id, address, phoneNumber, websiteUri)); //轉成一般格式
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = "
-                + connectionResult.getErrorCode());
+        Log.e(TAG, "onConnectionFailed: ConnectionResult.getErrorCode() = " + connectionResult.getErrorCode());
         Toast.makeText(getContext(), "Could not connect to Google API Client: Error " + connectionResult.getErrorCode(), Toast.LENGTH_SHORT).show();
     }
 }
