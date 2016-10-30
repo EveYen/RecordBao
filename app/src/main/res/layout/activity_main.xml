@@ -20,7 +20,7 @@
         app:headerLayout="@layout/drawer"
         app:menu="@menu/activity_main_drawer"
         app:itemIconTint="#E8E8E8"
-        android:background="#b8164021"
+        android:background="@color/colorPrimary"
         android:alpha="80" />
 
 </android.support.v4.widget.DrawerLayout>

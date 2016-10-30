@@ -6,7 +6,8 @@
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/fragment_backg">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -17,19 +18,47 @@
             <AutoCompleteTextView
                 android:id="@+id/autocomplete_places"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_gravity="center_horizontal"
                 android:hint="請輸入地點"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:background="#60ffffff" />
 
-            <Button
-                android:id="@+id/button_clear"
-                android:layout_width="wrap_content"
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/map_et"
+                android:hint="請蘇祿地點，蘇祿完畢後請按介刃鍵"
+                android:gravity="center_horizontal" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|right"
-                android:text="clear"
-                android:background="#000f60"
-                android:textColor="#ffffff" />
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal">
+
+                <Button
+                    android:id="@+id/button_ok"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|right"
+                    android:text="OK"
+                    android:background="@color/fragment_button"
+                    android:textColor="#ffffff"
+                    android:layout_margin="10dp" />
+
+                <Button
+                    android:id="@+id/button_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|right"
+                    android:text="clear"
+                    android:background="@color/fragment_button"
+                    android:textColor="#ffffff"
+                    android:layout_margin="10dp" />
+
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="wrap_content"

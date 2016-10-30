@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/fragment_backg">
 
     <EditText
         android:layout_width="match_parent"
@@ -10,8 +11,9 @@
         android:layout_gravity="center_horizontal"
         android:layout_margin="20dp"
         android:autoText="false"
-        android:background="#c5e8ff"
-        android:layout_weight="2" />
+        android:background="#4fffffff"
+        android:layout_weight="2"
+        android:textColor="#ffffff" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -27,7 +29,7 @@
             android:layout_height="wrap_content"
             android:text="OK"
             android:id="@+id/test_btn"
-            android:background="#20005d"
+            android:background="@color/fragment_button"
             android:textColor="#ffffff"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp" />
@@ -37,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="Clear"
             android:id="@+id/test_clear"
-            android:background="#20005d"
+            android:background="@color/fragment_button"
             android:textColor="#ffffff"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp" />
@@ -49,7 +51,7 @@
         android:layout_height="match_parent"
         android:id="@+id/scrollView"
         android:layout_weight="1"
-        android:background="#ffd0d0"
+        android:background="#4fffffff"
         android:layout_margin="20dp">
 
         <TextView
@@ -59,8 +61,9 @@
             android:id="@+id/test_output"
             android:layout_gravity="center_horizontal"
             android:layout_margin="20dp"
-            android:background="#ffd0d0"
-            android:layout_weight="1" />
+            android:background="#00ffffff"
+            android:layout_weight="1"
+            android:textColor="#ffffff" />
     </ScrollView>
 
 </LinearLayout>

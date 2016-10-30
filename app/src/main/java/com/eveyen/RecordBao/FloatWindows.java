@@ -244,6 +244,7 @@ public class FloatWindows extends Service {
         public void handleMessage(android.os.Message msg) {
             if (msg.what == 500) {
                 Data_Function.saveData(getBaseContext(), Title, getText, voicePath, Sdate, Sloca, Sche, Person);
+                Person = "";
             }
         }
     };
