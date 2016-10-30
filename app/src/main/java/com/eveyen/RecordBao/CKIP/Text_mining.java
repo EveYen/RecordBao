@@ -4,8 +4,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,7 +16,7 @@ import tw.cheyingwu.ckip.Term;
 
 /**
  *  作者：EveYen
- *  最後修改日期：10/13
+ *  最後修改日期：10/30
  *  完成功能：CKIP
  */
 public class Text_mining {
@@ -338,13 +336,6 @@ public class Text_mining {
     }
 
     public String getPerson(){
-        /*//電話狀態的Listener
-        MyPhoneStateListener myPhoneStateListener = new MyPhoneStateListener();
-        //取得TelephonyManager
-        TelephonyManager telephonyManager = (TelephonyManager) mcontext.getSystemService(Context.TELEPHONY_SERVICE);
-        //將電話狀態的Listener加到取得TelephonyManager
-        telephonyManager.listen(myPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);*/
-
        ArrayList<String[]> contact = getContactsName();
         for(int i = 0;i<TagList.size();i++){
             if(TagList.get(i).equals("N") && DoneList.get(i).equals(false)){
@@ -379,32 +370,4 @@ public class Text_mining {
         }
         return contactinfo;
     }
-
-    public class MyPhoneStateListener extends PhoneStateListener {
-        @Override
-        public void onCallStateChanged(int state, String phoneNumber) {
-            switch (state) {
-                //電話狀態是閒置的
-                case TelephonyManager.CALL_STATE_IDLE:
-                    break;
-                //電話狀態是接起的
-                case TelephonyManager.CALL_STATE_OFFHOOK:
-                    ArrayList<String[]> contact = getContactsName();
-                    for(int j=0;j < contact.size();j++){
-                        if(phoneNumber.equals(contact.get(j)[1])){
-                            contactName = contact.get(j)[0];
-                        }
-                    }
-                    break;
-                //電話狀態是響起的
-                case TelephonyManager.CALL_STATE_RINGING:
-                    break;
-                default:
-                    break;
-            }
-            super.onCallStateChanged(state, phoneNumber);
-        }
-
-    }
-
 }

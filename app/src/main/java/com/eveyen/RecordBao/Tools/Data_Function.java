@@ -12,18 +12,14 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  *  作者：EveYen
- *  最後修改日期：10/18
- *  完成功能：搜尋檔案/回傳檔案路徑
+ *  最後修改日期：10/30
+ *  完成功能：回傳檔案路徑/讀byte檔/上傳SQLite
  */
 public class Data_Function {
-
-    private static List<File> list = new ArrayList<File>();
     private static SQL_implement item;
 
     public static String getRootPath() {

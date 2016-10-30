@@ -128,7 +128,6 @@ public class SQL_implement {
             // 讀取包裝一筆資料的物件
             item = getRecord(result);
         }
-
         // 關閉Cursor物件
         result.close();
         // 回傳結果
@@ -154,7 +153,6 @@ public class SQL_implement {
         // 回傳結果
         return result;
     }
-
 
     // 取得資料數量
     public int getCount() {

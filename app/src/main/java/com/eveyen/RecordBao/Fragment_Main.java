@@ -23,8 +23,11 @@ import java.io.File;
 import java.util.ArrayList;
 
 /**
- *
+ *  作者：EveYen
+ *  最後修改日期：10/30
+ *  完成功能：便條紙畫面/實現右滑刪除/下拉刷新
  */
+
 public class Fragment_Main extends Fragment {
     private View v;
 

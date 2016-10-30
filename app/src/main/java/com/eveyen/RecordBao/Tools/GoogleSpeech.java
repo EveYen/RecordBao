@@ -9,12 +9,13 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 /**
- * Created by eveyen on 2016/10/18.
+ *  作者：EveYen
+ *  最後修改日期：10/30
+ *  完成功能：與Google speech連線
  */
 public class GoogleSpeech {
 
     public static HttpURLConnection getConnection(){
-
         HttpURLConnection connection = null;
         try{
             URL httpUrl = new URL("http://www.google.com/speech-api/v2/recognize?xjerr=1&client=chromium&maxresults=1&lang=zh-TW&key=AIzaSyBPohttFCsLdkFGqyuAL8qcWuYkMv9VJJo");
@@ -35,7 +36,7 @@ public class GoogleSpeech {
 
     public static String getTextString(String textString)
     {
-        String returnStr="你沒講話啊";
+        String returnStr="---";
         if(textString.split("transcript\":\"").length>1) {
             returnStr = textString.split("transcript\":\"")[1].split("\"")[0];
         }

@@ -9,6 +9,11 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+/**
+ *  作者：EveYen
+ *  最後修改日期：10/30
+ *  完成功能：實作所有錄音程序
+ */
 public class Record_implement {
     private static final String TAG = Record_implement.class.getName();
     private static final int TIMER_INTERVAL = 120;

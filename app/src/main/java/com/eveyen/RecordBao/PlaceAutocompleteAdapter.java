@@ -26,6 +26,12 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+/**
+ *  作者：EveYen
+ *  最後修改日期：10/30
+ *  完成功能：自動完成的adapter
+ */
+
 public class PlaceAutocompleteAdapter extends ArrayAdapter<AutocompletePrediction> implements Filterable {
 
     private static final String TAG = "PlaceAutocompleteAdapter";

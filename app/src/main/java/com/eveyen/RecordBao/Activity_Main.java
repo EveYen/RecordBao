@@ -16,6 +16,12 @@ import android.widget.FrameLayout;
 
 import com.google.android.gms.common.api.GoogleApiClient;
 
+/**
+ *  作者：EveYen
+ *  最後修改日期：10/30
+ *  完成功能：整體框架設定安排
+ */
+
 public class Activity_Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private FrameLayout rootLayout;

@@ -14,6 +14,12 @@ import com.eveyen.RecordBao.CKIP.Text_mining;
 
 import java.util.ArrayList;
 
+/**
+ *  作者：EveYen
+ *  最後修改日期：10/30
+ *  完成功能：測試CKIP介面
+ */
+
 public class Fragment_CKIP extends Fragment {
     /**
      * init View element

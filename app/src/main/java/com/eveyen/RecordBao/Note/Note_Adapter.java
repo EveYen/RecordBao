@@ -63,13 +63,11 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         SQL_Item temp = mlist.get(position);
         TextView tv_title = holder.tv_title;
         TextView tv_content = holder.tv_content;
-        //TextView tv_time = holder.tv_time;
         LinearLayout lv_note = holder.lv_note;
         lv_note.setBackgroundColor(temp.getColor());
         String[] stitle=temp.getTitle().split("_");
         tv_title.setText(stitle[1]+"/"+stitle[2]+"   "+stitle[3]+":"+stitle[4]+":"+stitle[5].split(".wav")[0]);
         tv_content.setText("時間："+temp.getScheduleDate() + "\n與："+ temp.getContact() +"\n"+ temp.getContent());
-        //tv_time.setText(Long.toString(temp.getDatetime()));
     }
 
     @Override
@@ -79,7 +77,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public TextView tv_title,tv_content,tv_time;
+        public TextView tv_title,tv_content;
         public LinearLayout lv_note;
         public MyViewHolderClick mListener;
         public ViewHolder(View itemView, MyViewHolderClick listener){
@@ -88,7 +86,6 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
             lv_note = (LinearLayout) itemView.findViewById(R.id.lv_note);
             tv_title = (TextView) itemView.findViewById(R.id.ItemName);
             tv_content = (TextView) itemView.findViewById(R.id.ItemTrans);
-            //tv_time = (TextView) itemView.findViewById(R.id.ItemTime);
             lv_note.setOnClickListener(this);
         }
         @Override

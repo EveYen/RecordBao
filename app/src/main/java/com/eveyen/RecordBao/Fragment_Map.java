@@ -27,10 +27,12 @@ import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
-
 /**
- * A simple {@link Fragment} subclass.
+ *  作者：EveYen
+ *  最後修改日期：10/30
+ *  完成功能：自動完成地點
  */
+
 public class Fragment_Map extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
     private View v;
 
