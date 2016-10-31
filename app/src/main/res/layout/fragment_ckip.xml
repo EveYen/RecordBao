@@ -13,7 +13,7 @@
         android:autoText="false"
         android:background="#4fffffff"
         android:layout_weight="2"
-        android:textColor="#ffffff" />
+        android:textColor="@color/fragment_text" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -63,7 +63,7 @@
             android:layout_margin="20dp"
             android:background="#00ffffff"
             android:layout_weight="1"
-            android:textColor="#ffffff" />
+            android:textColor="@color/fragment_text" />
     </ScrollView>
 
 </LinearLayout>

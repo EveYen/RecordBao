@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.eveyen.RecordBao.CKIP.Text_mining;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -36,6 +37,7 @@ public class Fragment_CKIP extends Fragment {
     ArrayList<String> TagList = new ArrayList<String>();   //宣告動態陣列 存切詞的詞性
     ArrayList<Boolean> DoneList = new ArrayList<Boolean>();
     ArrayList<String[]> Contact = new ArrayList<String[]>();
+    String location = "";
     String SDate = "";
     String Person = null;
 
@@ -76,6 +78,11 @@ public class Fragment_CKIP extends Fragment {
                             SDate = text_mining.getDate();
                             Person = text_mining.getPerson();
                             Contact = text_mining.getContactsName();
+                            try {
+                                location = text_mining.getLocation();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                             updateProHandler.sendEmptyMessage(500);
                         }
                     }.start();
@@ -109,9 +116,13 @@ public class Fragment_CKIP extends Fragment {
                     textView.append("與："+ Person);
                     textView.append("\n");
                 }
-                for(int j=0;j<Contact.size();j++){
-                    textView.append(Contact.get(j)[0]+"/" + Contact.get(j)[1]+"\n");
+                if(location!=null){
+                    textView.append("經緯度："+ location);
+                    textView.append("\n");
                 }
+                //for(int j=0;j<Contact.size();j++){
+                    //textView.append(Contact.get(j)[0]+"/" + Contact.get(j)[1]+"\n");
+                //}
             }
         }
     };
