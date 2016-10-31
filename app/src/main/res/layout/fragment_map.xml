@@ -24,13 +24,6 @@
                 android:singleLine="true"
                 android:background="#60ffffff" />
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:id="@+id/map_et"
-                android:hint="請蘇祿地點，蘇祿完畢後請按介刃鍵"
-                android:gravity="center_horizontal" />
-
             <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"

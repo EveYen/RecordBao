@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +40,6 @@ public class Fragment_Map extends Fragment implements GoogleApiClient.OnConnecti
     private PlaceAutocompleteAdapter mAdapter;
     private AutoCompleteTextView mAutocompleteView;
     private TextView mPlaceDetailsText;
-    private EditText editText;
     private static final LatLngBounds BOUNDS_GREATER_SYDNEY = new LatLngBounds(new LatLng(-25, 120), new LatLng(-22, 122));
     private static String TAG = "MAP";
     private Button ok_btn,clear_btn;
@@ -63,7 +61,7 @@ public class Fragment_Map extends Fragment implements GoogleApiClient.OnConnecti
         mAutocompleteView = (AutoCompleteTextView) v.findViewById(R.id.autocomplete_places);
         mAutocompleteView.setOnItemClickListener(mAutocompleteClickListener);
         mPlaceDetailsText = (TextView) v.findViewById(R.id.place_details);
-        editText = (EditText) v.findViewById(R.id.map_et);
+
 
         mAdapter = new PlaceAutocompleteAdapter(getContext(), mGoogleApiClient, BOUNDS_GREATER_SYDNEY, null);
         mAutocompleteView.setAdapter(mAdapter);

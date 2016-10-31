@@ -217,13 +217,13 @@ public class Text_mining {
                     if(num==3) this.calendar.add(Calendar.DATE,+2);
                     break;
             }
-            if(calendar.get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY))
-                return time_in_day.format(calendar.getTime());
-            else if(calendar.get(Calendar.MINUTE) == now.get(Calendar.MINUTE)){
-                return time_in_hour.format(calendar.getTime());
-            }else{
+            //if(calendar.get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY))
+            //    return time_in_day.format(calendar.getTime());
+            //else if(calendar.get(Calendar.MINUTE) == now.get(Calendar.MINUTE)){
+            //    return time_in_hour.format(calendar.getTime());
+            //}else{
                 return time_in_min.format(calendar.getTime());
-            }
+            //}
         }
         return null;
     }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fragment_backg">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_vertical">
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="66dp"
+            android:text="  開啟泡泡按鈕"
+            android:id="@+id/switch_flow"
+            android:checked="false"
+            android:textColor="@color/fragment_text"
+            android:layout_margin="10dp"
+            android:textSize="16dp"
+            android:background="#16000000" />
+
+    </LinearLayout>
+
+</LinearLayout>

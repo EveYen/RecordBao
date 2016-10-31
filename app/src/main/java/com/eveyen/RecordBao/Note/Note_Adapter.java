@@ -12,11 +12,15 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.eveyen.RecordBao.CalendarHelper;
 import com.eveyen.RecordBao.R;
 import com.eveyen.RecordBao.SQL.SQL_Item;
 import com.eveyen.RecordBao.SQL.SQL_implement;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -51,7 +55,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
                 else {
                     int oldOpened = opened;
                     opened = position;
-                    //notifyItemChanged(oldOpened);
+                    notifyItemChanged(oldOpened);
                     notifyItemChanged(opened);
                 }
             }
@@ -67,7 +71,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        SQL_Item temp = mlist.get(position);
+        final SQL_Item temp = mlist.get(position);
         TextView tv_title = holder.tv_title;
         TextView tv_content = holder.tv_content;
         LinearLayout lv_note = holder.lv_note;
@@ -104,13 +108,33 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
                 }
             }
         });
-        holder.btn_top.setOnClickListener(new View.OnClickListener() {
+        holder.btn_addcal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //int fromPosition = position;
                 //int toPosition = 1;
                 //notifyItemMoved(fromPosition, toPosition);
-                holder.btn_top.setText("取消置頂");
+                //建立事件開始時間
+                SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm EEEE");
+                Calendar beginTime = Calendar.getInstance();
+                Calendar endTime = Calendar.getInstance();
+                try {
+                    beginTime.setTime(df2.parse(temp.getScheduleDate()));//建立事件結束時間
+                    endTime.setTime(df2.parse(temp.getScheduleDate()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                CalendarHelper calIntent = new CalendarHelper();
+
+                calIntent.setTitle(temp.getContent());
+                calIntent.setDescription("與"+temp.getContact());
+                calIntent.setBeginTimeInMillis(beginTime.getTimeInMillis());
+                calIntent.setEndTimeInMillis(endTime.getTimeInMillis());
+                calIntent.setLocation(temp.getScheduleLocation());
+
+                Intent intent = calIntent.getIntentAfterSetting();
+//送出意圖
+                mContext.startActivity(intent);
             }
         });
 
@@ -126,7 +150,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         public TextView tv_title,tv_content;
         public LinearLayout lv_note,lv_info;
         public MyViewHolderClick mListener;
-        public Button btn_delete,btn_play,btn_top;
+        public Button btn_delete,btn_play, btn_addcal;
 
         public ViewHolder(View itemView, MyViewHolderClick listener){
             super(itemView);
@@ -137,7 +161,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
             tv_content = (TextView) itemView.findViewById(R.id.ItemTrans);
             btn_play = (Button) itemView.findViewById(R.id.ItemPlay);
             btn_delete = (Button) itemView.findViewById(R.id.itemDel) ;
-            btn_top = (Button) itemView.findViewById(R.id.ItemTop);
+            btn_addcal = (Button) itemView.findViewById(R.id.ItemTop);
             lv_note.setOnClickListener(this);
         }
 

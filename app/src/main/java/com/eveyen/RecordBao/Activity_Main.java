@@ -1,6 +1,5 @@
 package com.eveyen.RecordBao;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -109,12 +108,6 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_flow) {
-            startService(new Intent(Activity_Main.this,FloatWindows.class));
-            //onBackPressed();
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -140,9 +133,13 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
                 fragment = new Fragment_CKIP();
                 toolbar.setTitle("CKIP Test");
                 break;
-            case R.id.nav_map:
-                fragment = new Fragment_Map();
-                toolbar.setTitle("Map Test");
+            //case R.id.nav_map:
+            //    fragment = new Fragment_Map();
+            //    toolbar.setTitle("Map Test");
+            //    break;
+            case R.id.nav_settings:
+                fragment = new Fragment_Setting();
+                toolbar.setTitle("Settings");
                 break;
             default:
                 break;

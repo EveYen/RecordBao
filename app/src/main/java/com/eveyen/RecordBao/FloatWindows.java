@@ -76,30 +76,31 @@ public class FloatWindows extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        params = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PRIORITY_PHONE,
-                LayoutParamFlags, PixelFormat.TRANSLUCENT);
-        params.gravity = Gravity.TOP | Gravity.LEFT; // 圖片按鈕的初始位置
-        windowManager = (WindowManager) this.getSystemService(WINDOW_SERVICE);
-        mDisplay = windowManager.getDefaultDisplay();
-        LayoutInflater inflater = LayoutInflater.from(this);
-        layoutView = inflater.inflate(R.layout.floatwindows, null); // 取得layout
-        windowManager.addView(layoutView, params);
-
         //電話狀態的Listener
         MyPhoneStateListener myPhoneStateListener = new MyPhoneStateListener();
         //取得TelephonyManager
         TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         //將電話狀態的Listener加到取得TelephonyManager
         telephonyManager.listen(myPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        createFloatView();
+    }
 
-        final ImageButton button = (ImageButton) layoutView
-                .findViewById(R.id.float_imgb); // 取得圖片按鈕
+    private void createFloatView(){
+        params = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_PRIORITY_PHONE,
+                LayoutParamFlags, PixelFormat.TRANSLUCENT);
+        params.gravity = Gravity.CENTER_HORIZONTAL | Gravity.LEFT; // 圖片按鈕的初始位置
+        windowManager = (WindowManager) this.getSystemService(WINDOW_SERVICE);
+        mDisplay = windowManager.getDefaultDisplay();
+        LayoutInflater inflater = LayoutInflater.from(this);
+        layoutView = inflater.inflate(R.layout.floatwindows, null); // 取得layout
+        windowManager.addView(layoutView, params);
+
+
+        final ImageButton button = (ImageButton) layoutView.findViewById(R.id.float_imgb); // 取得圖片按鈕
         button.setBackgroundResource(R.drawable.microphone);
-        // 圖片按鈕-點擊監聽事件
         View.OnClickListener clickListener = new View.OnClickListener() {
             public void onClick(View view) {
                 try {
