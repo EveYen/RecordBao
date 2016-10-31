@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.eveyen.RecordBao.CKIP.Text_mining;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -82,6 +84,8 @@ public class Fragment_CKIP extends Fragment {
                                 location = text_mining.getLocation();
                             } catch (IOException e) {
                                 e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
                             updateProHandler.sendEmptyMessage(500);
                         }
@@ -117,7 +121,7 @@ public class Fragment_CKIP extends Fragment {
                     textView.append("\n");
                 }
                 if(location!=null){
-                    textView.append("經緯度："+ location);
+                    textView.append("地點："+ location);
                     textView.append("\n");
                 }
                 //for(int j=0;j<Contact.size();j++){

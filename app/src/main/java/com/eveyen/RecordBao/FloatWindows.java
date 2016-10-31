@@ -28,6 +28,8 @@ import com.eveyen.RecordBao.SQL.SQL_implement;
 import com.eveyen.RecordBao.Tools.Data_Function;
 import com.eveyen.RecordBao.Tools.GoogleSpeech;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -229,7 +231,11 @@ public class FloatWindows extends Service {
                         inputList = text_mining.getInputList();
                         TagList = text_mining.getTagList();
                         Sdate = text_mining.getDate();
-                        Sloca = text_mining.getLocation();
+                        try {
+                            Sloca = text_mining.getLocation();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         //Person = text_mining.getPerson();
                         updateProHandler.sendEmptyMessage(500);
                         Log.e("TAG",getText);

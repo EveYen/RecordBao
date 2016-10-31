@@ -22,6 +22,8 @@ import com.eveyen.RecordBao.Record.Record_implement;
 import com.eveyen.RecordBao.Tools.Data_Function;
 import com.eveyen.RecordBao.Tools.GoogleSpeech;
 
+import org.json.JSONException;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -203,7 +205,11 @@ public class Fragment_Record extends Fragment implements View.OnClickListener {
                         inputList = text_mining.getInputList();
                         TagList = text_mining.getTagList();
                         Sdate = text_mining.getDate();
-                        Sloca = text_mining.getLocation();
+                        try {
+                            Sloca = text_mining.getLocation();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                         //Person = text_mining.getPerson();
 
                         updateProHandler.sendEmptyMessage(500);//這個thread完成才送出訊息給Handler

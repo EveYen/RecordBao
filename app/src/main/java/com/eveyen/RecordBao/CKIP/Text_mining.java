@@ -10,6 +10,10 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -33,7 +37,9 @@ import tw.cheyingwu.ckip.Term;
  *  完成功能：CKIP
  */
 public class Text_mining {
+
     private Context mcontext;
+    private String TAG = "text_mining";
     static ArrayList<String> inputList; //宣告動態陣列 存切詞的name
     static ArrayList<String> TagList;   //宣告動態陣列 存切詞的詞性
     static ArrayList<Boolean> DoneList;   //宣告動態陣列 確認是否已經分析過
@@ -45,6 +51,7 @@ public class Text_mining {
     private String URL = "https://maps.googleapis.com/maps/api/place/textsearch/json?";
     private String Key = "AIzaSyBHkShKCuIqzU604t7VGsGylpToOecQaCo";
     String contactName = null;
+    JSONObject j;
 
     public Text_mining(Context context, String textString) {
         mcontext = context;
@@ -336,15 +343,33 @@ public class Text_mining {
         }
     }
 
-    public String getLocation() throws IOException {
-        //for (int i = 0; i < TagList.size() - 1; i++) {
-        //    if (TagList.get(i).equals("P")) {
-        //        return inputList.get(i + 1);
-        //    }
-        //}
-
+    public String getLocation() throws IOException, JSONException {
+        int size = TagList.size();
+        Boolean[] temp = new Boolean[size];
+        for (int i = 0; i < size; i++) {
+            temp[i]=false;
+        }
+        String request = "";
+        String result = "";
         Location location = locateUser();
-        return connectToPlaceApi(location,5000,"成功大學");
+
+        for (int i = 0; i < size; i++) {
+            String token = inputList.get(i);
+            if((TagList.get(i).equals("N") || TagList.get(i).equals("DET"))&& !DoneList.get(i)){
+                request+=token+",";
+                temp[i]=true;
+            }
+        }
+        result = JsonToInfo(connectToPlaceApi(location,5000,request));
+        if(result!=null){
+            for (int i = 0; i < size; i++) {
+                if(temp[i]){
+                    result.contains(inputList.get(i));
+                    DoneList.set(i,true);
+                }
+            }
+        }
+        return result;
     }
 
     public String getPerson() {
@@ -426,10 +451,15 @@ public class Text_mining {
         return result;
     }
 
-    private String JsonToInfo(String json){
-        String result = "";
-        
-        return "";
+    private String JsonToInfo(String json) throws JSONException {
+        try{
+            j = new JSONObject(json);
+            Object jsonOb = j.getJSONArray("results").getJSONObject(0).get("name");
+            return (String) jsonOb;
+        }catch(Exception e) {
+            Log.e(TAG,"can not convert from json.");
+        }
+        return null;
     }
 
 }
