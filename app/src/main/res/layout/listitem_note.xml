@@ -5,8 +5,7 @@
     android:layout_height="wrap_content"
     android:padding="5dp"
     android:descendantFocusability="blocksDescendants"
-    android:orientation="horizontal"
-    android:background="#d6fee4"
+    android:orientation="vertical"
     android:gravity="top|left|center"
     android:elevation="5dp"
     android:id="@+id/lv_note"
@@ -39,9 +38,47 @@
             android:layout_height="20dp"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:text="---"
-            android:textAlignment="textEnd"
+            android:text="～～"
+            android:textAlignment="viewEnd"
             android:gravity="bottom" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#4f000000"
+        android:id="@+id/lv_info">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="刪除"
+            android:id="@+id/itemDel"
+            android:background="#00ffffff"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:layout_margin="3dp" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="播放"
+            android:id="@+id/ItemPlay"
+            android:layout_weight="1"
+            android:background="#00ffffff"
+            android:singleLine="true"
+            android:layout_margin="3dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="置頂"
+            android:id="@+id/ItemTop"
+            android:layout_weight="1"
+            android:layout_margin="3dp"
+            android:background="#00ffffff" />
     </LinearLayout>
 
 

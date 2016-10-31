@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +18,6 @@ import com.eveyen.RecordBao.Note.Note_ItemSpace;
 import com.eveyen.RecordBao.SQL.SQL_Item;
 import com.eveyen.RecordBao.SQL.SQL_implement;
 
-import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -55,36 +53,11 @@ public class Fragment_Main extends Fragment {
         lists = SQL_implement.getAll();
 
         final Note_Adapter adapter = new Note_Adapter(getContext(),lists);
-        ItemTouchHelper.Callback mCallback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP|ItemTouchHelper.DOWN,ItemTouchHelper.RIGHT) {
-            @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-                int fromPosition = viewHolder.getAdapterPosition();
-                int toPosition = target.getAdapterPosition();
-                adapter.notifyItemMoved(fromPosition, toPosition);
-                return true;
-            }
-            //
-            @Override
-            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                int position = viewHolder.getAdapterPosition();
-                File f = new File(lists.get(position).getFileName());
-                if(f.exists()){
-                    item.delete(lists.get(position));
-                    f.delete();
-                    lists.remove(position);
-                    adapter.notifyItemRemoved(position);
-                    Snackbar.make(v, "文件已刪除", Snackbar.LENGTH_SHORT).show();
-                }else {
-                    Snackbar.make(v, "文件不存在", Snackbar.LENGTH_SHORT).show();
-                }
-            }
-        };
 
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(mCallback);
-
+        rvContacts.getItemAnimator().setMoveDuration(300);
+        rvContacts.getItemAnimator().setChangeDuration(300);
         rvContacts.setAdapter(adapter);
         rvContacts.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
-        itemTouchHelper.attachToRecyclerView(rvContacts);
 
     }
 

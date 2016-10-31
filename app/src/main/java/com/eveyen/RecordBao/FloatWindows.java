@@ -65,7 +65,7 @@ public class FloatWindows extends Service {
     String Sloca = "";
     String Sdate = "";
     String Sche = "";
-    String Person = null;
+    String Person = "";
     ArrayList<String> inputList = new ArrayList<String>(); //宣告動態陣列 存切詞的name
     ArrayList<String> TagList = new ArrayList<String>();   //宣告動態陣列 存切詞的詞性
 
