@@ -74,12 +74,14 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         final SQL_Item temp = mlist.get(position);
         TextView tv_title = holder.tv_title;
         TextView tv_content = holder.tv_content;
+        TextView tv_info = holder.tv_info;
         LinearLayout lv_note = holder.lv_note;
         holder.bind(position);
         lv_note.setBackgroundColor(temp.getColor());
         String[] stitle=temp.getTitle().split("_");
+        tv_info.setText("時間："+temp.getScheduleDate() +"\n地點："+ temp.getScheduleLocation() + "\n與："+ temp.getContact() );
         tv_title.setText(stitle[1]+"/"+stitle[2]+"   "+stitle[3]+":"+stitle[4]+":"+stitle[5].split(".wav")[0]);
-        tv_content.setText("時間："+temp.getScheduleDate() + "\n與："+ temp.getContact() +"\n"+ temp.getContent());
+        tv_content.setText(temp.getContent());
 
         holder.btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +149,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        public TextView tv_title,tv_content;
+        public TextView tv_title,tv_content,tv_info;
         public LinearLayout lv_note,lv_info;
         public MyViewHolderClick mListener;
         public Button btn_delete,btn_play, btn_addcal;
@@ -159,6 +161,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
             lv_info = (LinearLayout) itemView.findViewById(R.id.lv_info);
             tv_title = (TextView) itemView.findViewById(R.id.ItemName);
             tv_content = (TextView) itemView.findViewById(R.id.ItemTrans);
+            tv_info = (TextView) itemView.findViewById(R.id.ItemInfo);
             btn_play = (Button) itemView.findViewById(R.id.ItemPlay);
             btn_delete = (Button) itemView.findViewById(R.id.itemDel) ;
             btn_addcal = (Button) itemView.findViewById(R.id.ItemTop);

@@ -50,7 +50,7 @@ public class Text_mining {
 
     private String URL = "https://maps.googleapis.com/maps/api/place/textsearch/json?";
     private String Key = "AIzaSyBHkShKCuIqzU604t7VGsGylpToOecQaCo";
-    String contactName = null;
+    String contactName = "";
     JSONObject j;
 
     public Text_mining(Context context, String textString) {
@@ -350,7 +350,7 @@ public class Text_mining {
             temp[i]=false;
         }
         String request = "";
-        String result = "";
+        String result;
         Location location = locateUser();
 
         for (int i = 0; i < size; i++) {

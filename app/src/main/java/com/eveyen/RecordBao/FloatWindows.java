@@ -236,7 +236,7 @@ public class FloatWindows extends Service {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        //Person = text_mining.getPerson();
+                        Person = text_mining.getPerson();
                         updateProHandler.sendEmptyMessage(500);
                         Log.e("TAG",getText);
                     }catch (IOException ex){
