@@ -36,7 +36,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBHHdCXSvvU00OBQL8i4kHMiNY_0b9kG1w"/>
+            android:value="AIzaSyA4nJB8ro4aNm6SVpsFQ8WrdE1ScTvDluQ"/>
         <service
             android:name="com.eveyen.RecordBao.FloatWindows"
             android:enabled="true"

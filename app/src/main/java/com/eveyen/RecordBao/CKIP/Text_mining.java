@@ -69,6 +69,7 @@ public class Text_mining {
 
         for (Term t : connect.getTerm()) {
             inputList.add(t.getTerm()); // t.getTerm()會讀到斷詞的String，將其存到inputList陣列
+            Log.e(TAG,t.getTerm());
             TagList.add(t.getTag());    // t.getTag() 會讀到斷詞的詞性，將其存到TagList陣列
             DoneList.add(false);
         }
@@ -346,6 +347,7 @@ public class Text_mining {
     public String getLocation() throws IOException, JSONException {
         int size = TagList.size();
         Boolean[] temp = new Boolean[size];
+        int match = 0;
         for (int i = 0; i < size; i++) {
             temp[i]=false;
         }
@@ -360,12 +362,27 @@ public class Text_mining {
                 temp[i]=true;
             }
         }
-        result = JsonToInfo(connectToPlaceApi(location,5000,request));
+        /*Log.e(TAG,"one  "+request);
+        result = JsonToPlaceName(connectToPlaceApi(location,5000,request));
+        request = "";
         if(result!=null){
             for (int i = 0; i < size; i++) {
                 if(temp[i]){
-                    result.contains(inputList.get(i));
-                    DoneList.set(i,true);
+                    temp[i]= false;
+                    if(result.contains(inputList.get(i))) {
+                        request+=inputList.get(i)+",";
+                        temp[i] = true;
+                    }
+                }
+            }
+        }*/
+        result = JsonToPlaceName(connectToPlaceApi(location,5000,request));
+        if(result!=null){
+            for (int i = 0; i < size; i++) {
+                if(temp[i]){
+                    if(result.contains(inputList.get(i))) {
+                        DoneList.set(i, true);
+                    }
                 }
             }
         }
@@ -425,8 +442,10 @@ public class Text_mining {
 
     private String connectToPlaceApi(Location location, int radius ,String query) throws IOException {
         String result = "";
-        URL = URL + "&location=" + location.getLatitude() + "," + location.getLongitude();
-        URL = URL + "&radius=" + Integer.toString(radius);
+        if(location!=null){
+            URL = URL + "&location=" + location.getLatitude() + "," + location.getLongitude();
+            URL = URL + "&radius=" + Integer.toString(radius);
+        }
         URL = URL + "&language=zh-TW";
         URL = URL + "&query=" + query;
         URL = URL + "&key=" + Key;
@@ -451,10 +470,21 @@ public class Text_mining {
         return result;
     }
 
-    private String JsonToInfo(String json) throws JSONException {
+    private String JsonToPlaceName(String json) throws JSONException {
         try{
             j = new JSONObject(json);
             Object jsonOb = j.getJSONArray("results").getJSONObject(0).get("name");
+            return (String) jsonOb;
+        }catch(Exception e) {
+            Log.e(TAG,"can not convert from json.");
+        }
+        return null;
+    }
+
+    private String JsonToPlaceID(String json) throws JSONException {
+        try{
+            j = new JSONObject(json);
+            Object jsonOb = j.getJSONArray("results").getJSONObject(0).get("place_id");
             return (String) jsonOb;
         }catch(Exception e) {
             Log.e(TAG,"can not convert from json.");

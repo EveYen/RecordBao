@@ -12,6 +12,9 @@ import android.widget.TextView;
 
 import com.eveyen.RecordBao.CKIP.Text_mining;
 
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -67,7 +70,7 @@ public class Fragment_CKIP extends Fragment {
             public void onClick(View v) {
                 if(editText.getText()!=null){
                     final String teststring = editText.getText().toString();
-                    textView.setText(teststring);
+                    //textView.setText(teststring);
                     new Thread(){
                         @Override
                         public void run(){
@@ -76,15 +79,15 @@ public class Fragment_CKIP extends Fragment {
                             TagList = text_mining.getTagList();
                             DoneList = text_mining.getDoneList();
                             SDate = text_mining.getDate();
-                            //Person = text_mining.getPerson();
-                            //Contact = text_mining.getContactsName();
-                            //try {
-                            //    location = text_mining.getLocation();
-                            //} catch (IOException e) {
-                            //    e.printStackTrace();
-                            //} catch (JSONException e) {
-                            //    e.printStackTrace();
-                            //}
+                            Person = text_mining.getPerson();
+                            Contact = text_mining.getContactsName();
+                            try {
+                                location = text_mining.getLocation();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
                             updateProHandler.sendEmptyMessage(500);
                         }
                     }.start();
