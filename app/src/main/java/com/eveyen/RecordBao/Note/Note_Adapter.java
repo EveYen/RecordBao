@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,14 +80,20 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         holder.bind(position);
         lv_note.setBackgroundColor(temp.getColor());
         String[] stitle=temp.getTitle().split("_");
-        tv_info.setText("時間："+temp.getScheduleDate() +"\n地點："+ temp.getScheduleLocation() + "\n與："+ temp.getContact() );
+        tv_info.setText(temp.getId()+"\n時間："+temp.getScheduleDate() +"\n地點："+ temp.getScheduleLocation() + "\n與："+ temp.getContact() );
         tv_title.setText(stitle[1]+"/"+stitle[2]+"   "+stitle[3]+":"+stitle[4]+":"+stitle[5].split(".wav")[0]);
         tv_content.setText(temp.getContent());
+        Log.e("NoteAdapter","top"+String.valueOf(temp.getId())+"="+String.valueOf(temp.getTop()));
+        if(temp.getTop()==0){
+            holder.btn_top.setBackgroundResource(R.drawable.note_ntop);
+        }
+        else{
+            holder.btn_top.setBackgroundResource(R.drawable.note_top);
+        }
 
         holder.btn_play.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SQL_Item temp= mlist.get(position);
                 File f = new File(mlist.get(position).getFileName());
                 if(f.exists()){
                     systemPlay(f);
@@ -134,9 +141,22 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
                 calIntent.setEndTimeInMillis(endTime.getTimeInMillis());
                 calIntent.setLocation(temp.getScheduleLocation());
 
-                Intent intent = calIntent.getIntentAfterSetting();
-//送出意圖
+                Intent intent = calIntent.getIntentAfterSetting();//送出意圖
                 mContext.startActivity(intent);
+            }
+        });
+        holder.btn_top.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                if(temp.getTop()==0){
+                    holder.btn_top.setBackgroundResource(R.drawable.note_top);
+                    mlist.get(position).setTop(1);
+                }
+                else{
+                    holder.btn_top.setBackgroundResource(R.drawable.note_ntop);
+                    mlist.get(position).setTop(0);
+                }
+                item.update(mlist.get(position));
             }
         });
 
@@ -152,7 +172,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         public TextView tv_title,tv_content,tv_info;
         public LinearLayout lv_note,lv_info;
         public MyViewHolderClick mListener;
-        public Button btn_delete,btn_play, btn_addcal;
+        public Button btn_delete,btn_play, btn_addcal, btn_top;
 
         public ViewHolder(View itemView, MyViewHolderClick listener){
             super(itemView);
@@ -164,7 +184,8 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
             tv_info = (TextView) itemView.findViewById(R.id.ItemInfo);
             btn_play = (Button) itemView.findViewById(R.id.ItemPlay);
             btn_delete = (Button) itemView.findViewById(R.id.itemDel) ;
-            btn_addcal = (Button) itemView.findViewById(R.id.ItemTop);
+            btn_addcal = (Button) itemView.findViewById(R.id.ItemCal);
+            btn_top = (Button) itemView.findViewById(R.id.ItemTop);
             lv_note.setOnClickListener(this);
         }
 

@@ -9,6 +9,7 @@ public class SQL_Item {
     private long id;
     private long datetime;
     private int color;
+    private int top;
     private String title;
     private String content;
     private String fileName;
@@ -20,11 +21,12 @@ public class SQL_Item {
     public SQL_Item() {
         title = "";
         content = "";
+        top = 0;
         color = Color.LTGRAY;
     }
 
     public SQL_Item(long id, long datetime, int color, String title,
-                    String content, String fileName ,String sdate ,String sloca ,String sche ,String cont) {
+                    String content, String fileName ,String sdate ,String sloca ,String sche ,String cont,int top) {
         this.id = id;
         this.datetime = datetime;
         this.color = color;
@@ -35,6 +37,7 @@ public class SQL_Item {
         this.scheduleLocation = sloca;
         this.schedule = sche;
         this.contact = cont;
+        this.top = top;
     }
 
     public long getId() {
@@ -117,5 +120,12 @@ public class SQL_Item {
         this.contact = cont;
     }
 
+    public int getTop(){
+        return top;
+    }
+
+    public void setTop(int topp){
+        this.top = topp;
+    }
 
 }

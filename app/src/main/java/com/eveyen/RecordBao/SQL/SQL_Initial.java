@@ -5,14 +5,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by eveyen on 2016/9/8.
+ * Data Base version: 4
+ * change: add top
  */
 public class SQL_Initial extends SQLiteOpenHelper {
 
     // 資料庫名稱
     public static final String DATABASE_NAME = "mydata.db";
     // 資料庫版本，資料結構改變的時候要更改這個數字，通常是加一
-    public static final int VERSION = 3;
+    public static final int VERSION = 5;
     // 資料庫物件，固定的欄位變數
     private static SQLiteDatabase database;
 

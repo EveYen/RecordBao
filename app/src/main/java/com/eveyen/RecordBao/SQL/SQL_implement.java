@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -27,6 +28,7 @@ public class SQL_implement {
     public static final String SLOCA_COLUMN = "sloca";
     public static final String SCHEDULE_COLUMN = "schedule";
     public static final String CONTACT_COLUMN = "contact";
+    public static final String TOP_COLUMN = "top";
 
     // 使用上面宣告的變數建立表格的SQL指令
     public static final String CREATE_TABLE =
@@ -40,7 +42,8 @@ public class SQL_implement {
                     SDATE_COLUMN + " TEXT, "+
                     SLOCA_COLUMN + " TEXT, "+
                     SCHEDULE_COLUMN + " TEXT, "+
-                    CONTACT_COLUMN + " TEXT)";
+                    CONTACT_COLUMN + " TEXT, "+
+                    TOP_COLUMN + " INTEGER NOT NULL )";
 
     private static SQLiteDatabase db;
 
@@ -67,7 +70,8 @@ public class SQL_implement {
         cv.put(SDATE_COLUMN, item.getScheduleDate());
         cv.put(SLOCA_COLUMN, item.getScheduleLocation());
         cv.put(SCHEDULE_COLUMN, item.getSchedule());
-        cv.put(CONTACT_COLUMN,item.getContact());
+        cv.put(CONTACT_COLUMN, item.getContact());
+        cv.put(TOP_COLUMN, item.getTop());
 
         // 新增一筆資料並取得編號
         // 第一個參數是表格名稱
@@ -86,13 +90,19 @@ public class SQL_implement {
     public boolean update(SQL_Item item) {
         ContentValues cv = new ContentValues();
 
-        cv.put(COLOR_COLUMN, item.getColor());
-        cv.put(CONTENT_COLUMN, item.getContent());
+        cv.put(TOP_COLUMN, item.getTop());
 
-        String where = TITLE_COLUMN + "=" + item.getTitle();
-
-        return db.update(TABLE_NAME, cv, where, null) > 0;
+        String where = KEY_ID + "=" + item.getId();
+        Log.e("SQL" , String.valueOf(item.getId()) + String.valueOf(item.getTop()));
+        Log.e("SQL" , String.valueOf(get(item.getId()).getId()) +"--"+String.valueOf(get(item.getId()).getTop()));
+        if(0 < db.update(TABLE_NAME, cv ,where , null)){
+            Log.e("SQL" , String.valueOf(get(item.getId()).getId()) +"=="+String.valueOf(get(item.getId()).getTop()));
+            return true;
+        }
+        return false;
     }
+
+
 
     public boolean delete(SQL_Item item){
         String where = KEY_ID + "=" + item.getId() ;
@@ -153,6 +163,7 @@ public class SQL_implement {
         // 回傳結果
         return result;
     }
+
 
     // 取得資料數量
     public int getCount() {
