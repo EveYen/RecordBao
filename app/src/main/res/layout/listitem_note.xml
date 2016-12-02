@@ -17,13 +17,12 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:id="@+id/ItemInfo"
                 android:layout_weight="1" />
 

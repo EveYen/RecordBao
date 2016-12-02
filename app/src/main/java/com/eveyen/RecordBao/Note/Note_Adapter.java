@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,8 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -37,6 +38,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
     public static int opened = -1;
     public Note_Adapter(Context c , List<SQL_Item> list){
         mlist = list;
+        resetMList();
         mContext = c;
         item = new SQL_implement(mContext);
     }
@@ -80,11 +82,12 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         holder.bind(position);
         lv_note.setBackgroundColor(temp.getColor());
         String[] stitle=temp.getTitle().split("_");
-        tv_info.setText(temp.getId()+"\n時間："+temp.getScheduleDate() +"\n地點："+ temp.getScheduleLocation() + "\n與："+ temp.getContact() );
+        if(temp.getScheduleLocation() == null) temp.setScheduleLocation("");
+        tv_info.setText("時間："+temp.getScheduleDate() +"\n地點："+ temp.getScheduleLocation() + "\n與："+ temp.getContact() );
         tv_title.setText(stitle[1]+"/"+stitle[2]+"   "+stitle[3]+":"+stitle[4]+":"+stitle[5].split(".wav")[0]);
         tv_content.setText(temp.getContent());
-        Log.e("NoteAdapter","top"+String.valueOf(temp.getId())+"="+String.valueOf(temp.getTop()));
-        if(temp.getTop()==0){
+
+        if(mlist.get(position).getTop()==0){
             holder.btn_top.setBackgroundResource(R.drawable.note_ntop);
         }
         else{
@@ -127,7 +130,11 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
                 SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm EEEE");
                 Calendar beginTime = Calendar.getInstance();
                 Calendar endTime = Calendar.getInstance();
+                //Calendar ctemp = Calendar.getInstance();
+                //ctemp.setTimeInMillis(temp.getDatetime());
+                boolean allday = false;
                 try {
+                    //if(ctemp.get(Calendar.HOUR_OF_DAY) == df2.parse(temp.getScheduleDate()).getHours()) allday=true;
                     beginTime.setTime(df2.parse(temp.getScheduleDate()));//建立事件結束時間
                     endTime.setTime(df2.parse(temp.getScheduleDate()));
                 } catch (ParseException e) {
@@ -139,6 +146,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
                 calIntent.setDescription("與"+temp.getContact());
                 calIntent.setBeginTimeInMillis(beginTime.getTimeInMillis());
                 calIntent.setEndTimeInMillis(endTime.getTimeInMillis());
+                calIntent.setAllDay(allday);
                 calIntent.setLocation(temp.getScheduleLocation());
 
                 Intent intent = calIntent.getIntentAfterSetting();//送出意圖
@@ -150,13 +158,14 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
             public void onClick(View v) {
                 if(temp.getTop()==0){
                     holder.btn_top.setBackgroundResource(R.drawable.note_top);
-                    mlist.get(position).setTop(1);
+                    item.update(mlist.get(position),1);
                 }
                 else{
                     holder.btn_top.setBackgroundResource(R.drawable.note_ntop);
-                    mlist.get(position).setTop(0);
+                    item.update(mlist.get(position),0);
                 }
-                item.update(mlist.get(position));
+                resetMList();
+                notifyDataSetChanged();
             }
         });
 
@@ -167,6 +176,20 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         return mlist.size();
     }
 
+    public void resetMList(){
+        Collections.sort(mlist, new Comparator<SQL_Item>() {
+            @Override
+            public int compare(SQL_Item lhs, SQL_Item rhs) {
+                return (int)lhs.getDatetime()-(int)rhs.getDatetime();
+            }
+        });
+        Collections.sort(mlist, new Comparator<SQL_Item>() {
+            @Override
+            public int compare(SQL_Item lhs, SQL_Item rhs) {
+                return rhs.getTop()-lhs.getTop();
+            }
+        });
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView tv_title,tv_content,tv_info;

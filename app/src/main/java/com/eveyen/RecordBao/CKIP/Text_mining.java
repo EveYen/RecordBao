@@ -237,13 +237,13 @@ public class Text_mining {
                     if (num == 3) this.calendar.add(Calendar.DATE, +2);
                     break;
             }
-            //if(calendar.get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY))
-            //    return time_in_day.format(calendar.getTime());
-            //else if(calendar.get(Calendar.MINUTE) == now.get(Calendar.MINUTE)){
-            //    return time_in_hour.format(calendar.getTime());
-            //}else{
+            if(calendar.get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY))
+                return time_in_day.format(calendar.getTime());
+            else if(calendar.get(Calendar.MINUTE) == now.get(Calendar.MINUTE)){
+                return time_in_hour.format(calendar.getTime());
+            }else{
             return time_in_min.format(calendar.getTime());
-            //}
+            }
         }
         return null;
     }
@@ -347,7 +347,6 @@ public class Text_mining {
     public String getLocation() throws IOException, JSONException {
         int size = TagList.size();
         Boolean[] temp = new Boolean[size];
-        int match = 0;
         for (int i = 0; i < size; i++) {
             temp[i]=false;
         }
@@ -362,20 +361,6 @@ public class Text_mining {
                 temp[i]=true;
             }
         }
-        /*Log.e(TAG,"one  "+request);
-        result = JsonToPlaceName(connectToPlaceApi(location,5000,request));
-        request = "";
-        if(result!=null){
-            for (int i = 0; i < size; i++) {
-                if(temp[i]){
-                    temp[i]= false;
-                    if(result.contains(inputList.get(i))) {
-                        request+=inputList.get(i)+",";
-                        temp[i] = true;
-                    }
-                }
-            }
-        }*/
         result = JsonToPlaceName(connectToPlaceApi(location,5000,request));
         if(result!=null){
             for (int i = 0; i < size; i++) {

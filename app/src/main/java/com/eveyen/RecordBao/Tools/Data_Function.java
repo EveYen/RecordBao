@@ -70,6 +70,7 @@ public class Data_Function {
         int r = (int)(Math.random()*5-1);
         item = new SQL_implement(c);
         SQL_Item temp = new SQL_Item(0, new Date().getTime(), colors_autumn[r], Title, getText, voicePath, sdate, sloca, sche, contact,0);
-        item.insert(temp);
+        temp=item.insert(temp);
+        Log.e("SAVE","ID="+temp.getId()+" , date="+temp.getDatetime()+" , Title="+temp.getTitle()+" , contant="+temp.getContent()+" , top="+temp.getTop());
     }
 }

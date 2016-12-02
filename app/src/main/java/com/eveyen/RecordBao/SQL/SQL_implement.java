@@ -87,18 +87,20 @@ public class SQL_implement {
 
 
     // 修改參數指定的物件
-    public boolean update(SQL_Item item) {
-        ContentValues cv = new ContentValues();
+    public boolean update(SQL_Item item,int top) {
 
-        cv.put(TOP_COLUMN, item.getTop());
+        delete(item);
+        item.setTop(top);
+        item = insert(item);
 
-        String where = KEY_ID + "=" + item.getId();
-        Log.e("SQL" , String.valueOf(item.getId()) + String.valueOf(item.getTop()));
-        Log.e("SQL" , String.valueOf(get(item.getId()).getId()) +"--"+String.valueOf(get(item.getId()).getTop()));
-        if(0 < db.update(TABLE_NAME, cv ,where , null)){
-            Log.e("SQL" , String.valueOf(get(item.getId()).getId()) +"=="+String.valueOf(get(item.getId()).getTop()));
-            return true;
-        }
+
+        Log.e("啊啊啊啊啊啊啊", String.valueOf(item.getTop()));
+        /*ContentValues cv = new ContentValues();
+        cv.put(TOP_COLUMN, uptop);
+
+        String where = KEY_ID + "=" + upid;
+        */
+        if(item!=null) return true;
         return false;
     }
 
@@ -159,6 +161,7 @@ public class SQL_implement {
         result.setScheduleLocation(cursor.getString(7));
         result.setSchedule(cursor.getString(8));
         result.setContact(cursor.getString(9));
+        result.setTop(cursor.getInt(10));
 
         // 回傳結果
         return result;
