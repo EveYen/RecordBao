@@ -12,13 +12,15 @@
     android:minHeight="100dp">
 
     <LinearLayout
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1">
 
             <TextView
                 android:layout_width="match_parent"
@@ -26,68 +28,90 @@
                 android:id="@+id/ItemInfo"
                 android:layout_weight="1" />
 
-            <Button
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:id="@+id/ItemTop" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:id="@+id/ItemTrans"
+                android:textSize="16dp"
+                android:textStyle="bold"
+                android:minHeight="40dp" />
+
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
+        <ImageButton
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:id="@+id/ItemTrans"
-            android:textSize="16dp"
-            android:textStyle="bold"
-            android:minHeight="40dp" />
-
-        <TextView
-            android:id="@+id/ItemName"
-            android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:textSize="16sp"
-            android:text="～～"
-            android:textAlignment="viewEnd"
-            android:gravity="bottom"
-            android:textStyle="italic" />
+            android:id="@+id/ItemTop"
+            android:layout_gravity="center_vertical"
+            android:background="#00ffffff" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="64dp"
         android:layout_gravity="center_horizontal"
-        android:background="#4f000000"
+        android:background="#00000000"
         android:id="@+id/lv_info">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="刪除"
-            android:id="@+id/itemDel"
-            android:background="#00ffffff"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:layout_margin="3dp" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="播放"
-            android:id="@+id/ItemPlay"
-            android:layout_weight="1"
-            android:background="#00ffffff"
-            android:singleLine="true"
-            android:layout_margin="3dp" />
+        <TextView
+            android:id="@+id/ItemName"
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:textSize="14sp"
+            android:text="～～"
+            android:gravity="fill_horizontal"
+            android:textStyle="italic"
+            android:textAlignment="center" />
 
-        <Button
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="加入月曆"
-            android:id="@+id/ItemCal"
-            android:layout_weight="1"
-            android:layout_margin="3dp"
-            android:background="#00ffffff" />
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="刪除"
+                android:id="@+id/itemDel"
+                android:background="#62000000"
+                android:layout_weight="1"
+                android:singleLine="true"
+                android:layout_margin="3dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="播放"
+                android:id="@+id/ItemPlay"
+                android:layout_weight="1"
+                android:background="#62000000"
+                android:singleLine="true"
+                android:layout_margin="3dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="加入月曆"
+                android:id="@+id/ItemCal"
+                android:layout_weight="1"
+                android:layout_margin="3dp"
+                android:background="#62000000" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="修改"
+                android:id="@+id/ItemEdit"
+                android:layout_weight="1"
+                android:layout_margin="3dp"
+                android:background="#62000000" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 

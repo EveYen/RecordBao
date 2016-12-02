@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -87,19 +86,9 @@ public class SQL_implement {
 
 
     // 修改參數指定的物件
-    public boolean update(SQL_Item item,int top) {
-
+    public boolean update(SQL_Item item) {
         delete(item);
-        item.setTop(top);
         item = insert(item);
-
-
-        Log.e("啊啊啊啊啊啊啊", String.valueOf(item.getTop()));
-        /*ContentValues cv = new ContentValues();
-        cv.put(TOP_COLUMN, uptop);
-
-        String where = KEY_ID + "=" + upid;
-        */
         if(item!=null) return true;
         return false;
     }

@@ -1,23 +1,33 @@
 package com.eveyen.RecordBao.Note;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.eveyen.RecordBao.CKIP.Text_mining;
 import com.eveyen.RecordBao.CalendarHelper;
 import com.eveyen.RecordBao.R;
 import com.eveyen.RecordBao.SQL.SQL_Item;
 import com.eveyen.RecordBao.SQL.SQL_implement;
 
+import org.json.JSONException;
+
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,6 +45,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
     private Context mContext;
     private SQL_implement item;
     private List<SQL_Item> mlist;
+    Text_mining text_mining;
     public static int opened = -1;
     public Note_Adapter(Context c , List<SQL_Item> list){
         mlist = list;
@@ -88,10 +99,10 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         tv_content.setText(temp.getContent());
 
         if(mlist.get(position).getTop()==0){
-            holder.btn_top.setBackgroundResource(R.drawable.note_ntop);
+            holder.btn_top.setImageResource(R.drawable.note_ntop);
         }
         else{
-            holder.btn_top.setBackgroundResource(R.drawable.note_top);
+            holder.btn_top.setImageResource(R.drawable.note_top);
         }
 
         holder.btn_play.setOnClickListener(new View.OnClickListener() {
@@ -123,18 +134,11 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         holder.btn_addcal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //int fromPosition = position;
-                //int toPosition = 1;
-                //notifyItemMoved(fromPosition, toPosition);
-                //建立事件開始時間
                 SimpleDateFormat df2 = new SimpleDateFormat("yyyy-MM-dd HH:mm EEEE");
                 Calendar beginTime = Calendar.getInstance();
                 Calendar endTime = Calendar.getInstance();
-                //Calendar ctemp = Calendar.getInstance();
-                //ctemp.setTimeInMillis(temp.getDatetime());
                 boolean allday = false;
                 try {
-                    //if(ctemp.get(Calendar.HOUR_OF_DAY) == df2.parse(temp.getScheduleDate()).getHours()) allday=true;
                     beginTime.setTime(df2.parse(temp.getScheduleDate()));//建立事件結束時間
                     endTime.setTime(df2.parse(temp.getScheduleDate()));
                 } catch (ParseException e) {
@@ -157,15 +161,24 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 if(temp.getTop()==0){
-                    holder.btn_top.setBackgroundResource(R.drawable.note_top);
-                    item.update(mlist.get(position),1);
+                    holder.btn_top.setImageResource(R.drawable.note_top);
+                    temp.setTop(1);
+                    item.update(temp);
                 }
                 else{
-                    holder.btn_top.setBackgroundResource(R.drawable.note_ntop);
-                    item.update(mlist.get(position),0);
+                    holder.btn_top.setImageResource(R.drawable.note_ntop);
+                    temp.setTop(0);
+                    item.update(temp);
                 }
                 resetMList();
                 notifyDataSetChanged();
+            }
+        });
+
+        holder.btn_edit.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Alert(temp);
             }
         });
 
@@ -191,11 +204,67 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         });
     }
 
+    public void Alert(final SQL_Item temp) {
+
+        final Handler updateProHandler = new Handler() {
+            public void handleMessage(android.os.Message msg) {
+                if (msg.what == 500) {
+                    item.update(temp);
+                    resetMList();
+                    notifyDataSetChanged();
+                }
+            }
+        };
+
+        final View vitem = LayoutInflater.from(mContext).inflate(R.layout.editdialog, null);
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+        dialog.setTitle("請修改正確的錄音內容");
+        dialog.setView(vitem);
+        final EditText editText = (EditText) vitem.findViewById(R.id.edittext);
+        editText.setText(temp.getContent());
+        dialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                final String newcontent = editText.getText().toString();
+                temp.setContent(editText.getText().toString());
+
+                new Thread(){
+                    @Override
+                    public void run(){
+                        text_mining = new Text_mining(mContext, newcontent); //傳上去CKIP
+                        temp.setScheduleDate(text_mining.getDate());
+                        try {
+                            temp.setScheduleLocation(text_mining.getLocation());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        updateProHandler.sendEmptyMessage(500);
+                    }
+                }.start();
+                Log.e("TAG",newcontent);
+            }
+        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        dialog.show();
+
+
+
+    }
+
+
+
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView tv_title,tv_content,tv_info;
         public LinearLayout lv_note,lv_info;
         public MyViewHolderClick mListener;
-        public Button btn_delete,btn_play, btn_addcal, btn_top;
+        public Button btn_delete,btn_play, btn_addcal , btn_edit;
+        public ImageButton btn_top;
 
         public ViewHolder(View itemView, MyViewHolderClick listener){
             super(itemView);
@@ -208,7 +277,8 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
             btn_play = (Button) itemView.findViewById(R.id.ItemPlay);
             btn_delete = (Button) itemView.findViewById(R.id.itemDel) ;
             btn_addcal = (Button) itemView.findViewById(R.id.ItemCal);
-            btn_top = (Button) itemView.findViewById(R.id.ItemTop);
+            btn_edit = (Button) itemView.findViewById(R.id.ItemEdit);
+            btn_top = (ImageButton) itemView.findViewById(R.id.ItemTop);
             lv_note.setOnClickListener(this);
         }
 
