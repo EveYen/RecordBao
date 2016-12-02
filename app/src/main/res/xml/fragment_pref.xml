@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <SwitchPreference>
+    <SwitchPreference
         android:key="FLOAT_WINDOW"
         android:title="是否開啟泡泡按鈕"
-        android:summary="方便你隨時可以按下按鈕記下重要事項">
-    </SwitchPreference>
+        android:summary="方便你隨時可以按下按鈕記下重要事項"
+    />
 </PreferenceScreen>

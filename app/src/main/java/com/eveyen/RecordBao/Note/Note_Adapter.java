@@ -252,9 +252,6 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
             }
         });
         dialog.show();
-
-
-
     }
 
 

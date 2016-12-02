@@ -1,6 +1,10 @@
 package com.eveyen.RecordBao;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,8 +13,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -48,6 +55,7 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_fragment, fragment).commit();
 
+       this.startService(new Intent(this,FloatWindows.class));
     }
 
     /**
@@ -129,12 +137,8 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
                 fragment = new Fragment_Record();
                 toolbar.setTitle("Record");
                 break;
-            case R.id.nav_ckip:
-                fragment = new Fragment_CKIP();
-                toolbar.setTitle("CKIP Test");
-                break;
             case R.id.nav_settings:
-                fragment = new Fragment_Setting();
+                getFragmentManager().beginTransaction().replace(R.id.content_fragment, new SettingsFragment()).commit();
                 toolbar.setTitle("Settings");
                 break;
             default:
@@ -148,4 +152,41 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
         fragmentManager.beginTransaction().replace(R.id.content_fragment, fragment).commit();
         return true;
     }
+
+    public class SettingsFragment extends PreferenceFragment {
+        public SettingsFragment() {}
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.fragment_pref);
+
+            SwitchPreference bubbleSwitch = (SwitchPreference) findPreference("FLOAT_WINDOW");
+
+            if (bubbleSwitch != null) {
+                bubbleSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                    @Override
+                    public boolean onPreferenceChange(Preference preference, Object newValue) {
+                        boolean isOn = (Boolean) newValue;
+                        if (isOn) {
+                            getActivity().startService(new Intent(getActivity(),FloatWindows.class));
+                        } else {
+                            getActivity().stopService(new Intent(getActivity(),FloatWindows.class));
+                        }
+                        return true;
+                    }
+                });
+            }
+
+        }
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View view = super.onCreateView(inflater, container, savedInstanceState);
+            view.setBackgroundColor(getResources().getColor(R.color.fragment_backg));
+            return view;
+        }
+    }
+
+    public void Bubbles(){
+
+    }
 }
+
