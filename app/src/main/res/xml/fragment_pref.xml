@@ -5,4 +5,8 @@
         android:title="是否開啟泡泡按鈕"
         android:summary="方便你隨時可以按下按鈕記下重要事項"
     />
+    <!--ListPreference
+        android:key="COLORS"
+        android:title="請選擇便條紙主題"
+        -->
 </PreferenceScreen>

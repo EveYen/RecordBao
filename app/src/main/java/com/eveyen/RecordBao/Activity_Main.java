@@ -55,7 +55,7 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.content_fragment, fragment).commit();
 
-       this.startService(new Intent(this,FloatWindows.class));
+        this.startService(new Intent(this,FloatWindows.class));
     }
 
     /**

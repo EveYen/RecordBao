@@ -3,6 +3,7 @@ package com.eveyen.RecordBao.Note;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
@@ -12,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -35,6 +35,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import petrov.kristiyan.colorpicker.ColorPicker;
+
 /**
  *  作者：EveYen
  *  最後修改日期：10/30
@@ -47,6 +49,12 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
     private List<SQL_Item> mlist;
     Text_mining text_mining;
     public static int opened = -1;
+    public int[] colors = {Color.parseColor("#ffa6bc"),//粉紅
+            Color.parseColor("#FFA6CEFF"),//天空藍
+            Color.parseColor("#FFFFEF9F"),//鵝黃色
+            Color.parseColor("#FFB8FFBC"),//草綠色
+            Color.parseColor("#FFFFC894"),//橘色
+            };
     public Note_Adapter(Context c , List<SQL_Item> list){
         mlist = list;
         resetMList();
@@ -95,7 +103,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         String[] stitle=temp.getTitle().split("_");
         if(temp.getScheduleLocation() == null) temp.setScheduleLocation("");
         tv_info.setText("時間："+temp.getScheduleDate() +"\n地點："+ temp.getScheduleLocation() + "\n與："+ temp.getContact() );
-        tv_title.setText(stitle[1]+"/"+stitle[2]+"   "+stitle[3]+":"+stitle[4]+":"+stitle[5].split(".wav")[0]);
+        tv_title.setText("記錄於"+stitle[1]+"/"+stitle[2]+"   "+stitle[3]+":"+stitle[4]+":"+stitle[5].split(".wav")[0]);
         tv_content.setText(temp.getContent());
 
         if(mlist.get(position).getTop()==0){
@@ -118,17 +126,30 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         });
         holder.btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                File f = new File(mlist.get(position).getFileName());
-                if(f.exists()){
-                    item.delete(mlist.get(position));
-                    f.delete();
-                    mlist.remove(position);
-                    notifyItemRemoved(position);
-                    Snackbar.make(v, "文件已刪除", Snackbar.LENGTH_SHORT).show();
-                }else {
-                    Snackbar.make(v, "文件不存在", Snackbar.LENGTH_SHORT).show();
-                }
+            public void onClick(final View v) {
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+                dialog.setTitle("確定要刪除嗎?");
+                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        File f = new File(mlist.get(position).getFileName());
+                        if(f.exists()){
+                            item.delete(mlist.get(position));
+                            f.delete();
+                            mlist.remove(position);
+                            notifyItemRemoved(position);
+                            Snackbar.make(v, "文件已刪除", Snackbar.LENGTH_SHORT).show();
+                        }else {
+                            Snackbar.make(v, "文件不存在", Snackbar.LENGTH_SHORT).show();
+                        }
+                    }
+                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+                dialog.show();
             }
         });
         holder.btn_addcal.setOnClickListener(new View.OnClickListener() {
@@ -178,7 +199,30 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         holder.btn_edit.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Alert(temp);
+                Alert(temp,position);
+            }
+        });
+
+        holder.btn_color.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                ColorPicker colorPicker = new ColorPicker(mContext);
+                colorPicker.setColors(colors).setRoundColorButton(true).setTitle("請選擇便條顏色");
+                colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
+                    @Override
+                    public void onChooseColor(int colorposition,int color) {
+                            if(colorposition>-1){
+                            temp.setColor(color);
+                            item.update(temp);
+                            notifyItemChanged(position);
+                            }
+                    }
+                    @Override
+                    public void onCancel(){
+
+                    }
+                });
+                colorPicker.show();
             }
         });
 
@@ -204,7 +248,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         });
     }
 
-    public void Alert(final SQL_Item temp) {
+    public void Alert(final SQL_Item temp, final int position) {
 
         final Handler updateProHandler = new Handler() {
             public void handleMessage(android.os.Message msg) {
@@ -219,11 +263,10 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         final View vitem = LayoutInflater.from(mContext).inflate(R.layout.editdialog, null);
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-        dialog.setTitle("請修改正確的錄音內容");
         dialog.setView(vitem);
         final EditText editText = (EditText) vitem.findViewById(R.id.edittext);
         editText.setText(temp.getContent());
-        dialog.setPositiveButton("確認", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String newcontent = editText.getText().toString();
@@ -246,11 +289,12 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
                 }.start();
                 Log.e("TAG",newcontent);
             }
-        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
             }
         });
+
         dialog.show();
     }
 
@@ -260,8 +304,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         public TextView tv_title,tv_content,tv_info;
         public LinearLayout lv_note,lv_info;
         public MyViewHolderClick mListener;
-        public Button btn_delete,btn_play, btn_addcal , btn_edit;
-        public ImageButton btn_top;
+        public ImageButton  btn_addcal , btn_edit , btn_color,btn_play, btn_delete, btn_top;
 
         public ViewHolder(View itemView, MyViewHolderClick listener){
             super(itemView);
@@ -271,10 +314,11 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
             tv_title = (TextView) itemView.findViewById(R.id.ItemName);
             tv_content = (TextView) itemView.findViewById(R.id.ItemTrans);
             tv_info = (TextView) itemView.findViewById(R.id.ItemInfo);
-            btn_play = (Button) itemView.findViewById(R.id.ItemPlay);
-            btn_delete = (Button) itemView.findViewById(R.id.itemDel) ;
-            btn_addcal = (Button) itemView.findViewById(R.id.ItemCal);
-            btn_edit = (Button) itemView.findViewById(R.id.ItemEdit);
+            btn_play = (ImageButton) itemView.findViewById(R.id.ItemPlay);
+            btn_delete = (ImageButton) itemView.findViewById(R.id.itemDel) ;
+            btn_addcal = (ImageButton) itemView.findViewById(R.id.ItemCal);
+            btn_edit = (ImageButton) itemView.findViewById(R.id.ItemEdit);
+            btn_color = (ImageButton) itemView.findViewById(R.id.ItemColor);
             btn_top = (ImageButton) itemView.findViewById(R.id.ItemTop);
             lv_note.setOnClickListener(this);
         }

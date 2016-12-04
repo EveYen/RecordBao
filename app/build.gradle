@@ -41,4 +41,5 @@ dependencies {
     compile 'pub.devrel:easypermissions:0.1.5'
     compile 'com.google.maps.android:android-maps-utils:0.3.4'
     compile group: 'cz.msebera.android' , name: 'httpclient', version: '4.4.1.1'
+    compile 'petrov.kristiyan.colorpicker:colorpicker-library:1.1.2'
 }

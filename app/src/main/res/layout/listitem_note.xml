@@ -35,7 +35,7 @@
                 android:id="@+id/ItemTrans"
                 android:textSize="16dp"
                 android:textStyle="bold"
-                android:minHeight="40dp" />
+                android:minHeight="30dp" />
 
         </LinearLayout>
 
@@ -51,10 +51,11 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="53dp"
         android:layout_gravity="center_horizontal"
         android:background="#00000000"
-        android:id="@+id/lv_info">
+        android:id="@+id/lv_info"
+        android:showDividers="beginning">
 
         <TextView
             android:id="@+id/ItemName"
@@ -62,53 +63,57 @@
             android:layout_height="18dp"
             android:textSize="14sp"
             android:text="～～"
-            android:gravity="fill_horizontal"
             android:textStyle="italic"
-            android:textAlignment="center" />
+            android:textAlignment="textEnd"
+            android:textColor="#52000000"
+            android:gravity="right" />
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_height="35dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1">
 
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="刪除"
+                android:layout_height="35dp"
                 android:id="@+id/itemDel"
-                android:background="#62000000"
                 android:layout_weight="1"
-                android:singleLine="true"
-                android:layout_margin="3dp" />
+                android:src="@drawable/note_delete"
+                android:background="#00ffffff" />
 
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="播放"
+                android:layout_height="35dp"
                 android:id="@+id/ItemPlay"
                 android:layout_weight="1"
-                android:background="#62000000"
-                android:singleLine="true"
-                android:layout_margin="3dp" />
+                android:src="@drawable/note_play"
+                android:background="#00ffffff" />
 
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:text="加入月曆"
+                android:layout_height="35dp"
                 android:id="@+id/ItemCal"
                 android:layout_weight="1"
-                android:layout_margin="3dp"
-                android:background="#62000000" />
+                android:src="@drawable/note_calendar"
+                android:background="#00ffffff" />
 
-            <Button
+            <ImageButton
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="修改"
+                android:layout_height="35dp"
                 android:id="@+id/ItemEdit"
                 android:layout_weight="1"
-                android:layout_margin="3dp"
-                android:background="#62000000" />
+                android:src="@drawable/note_edit"
+                android:background="#00ffffff" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:id="@+id/ItemColor"
+                android:layout_weight="1"
+                android:src="@drawable/note_color"
+                android:background="#00ffffff" />
 
         </LinearLayout>
 

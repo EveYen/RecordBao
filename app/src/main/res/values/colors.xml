@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#0b6e4f</color>
-    <color name="colorPrimaryDark">#0B6E4F</color>
-    <color name="colorAccent">#84A98C</color>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#212121</color>
+    <color name="colorAccent">#a3a3a3</color>
 
-    <color name="fragment_backg">#cad2c5</color>
-    <color name="fragment_text">#474747</color>
+    <color name="fragment_backg">#e7e7e7</color>
+    <color name="fragment_text">#2e3032</color>
     <color name="fragment_button">#f2af29</color>
 
     <color name="swipe_blue">#00b2ff</color>
@@ -13,12 +13,11 @@
     <color name="swipe_green">#2dff2d</color>
     <color name="swipe_orenge">#ff8223</color>
 
-    <color name="note_pink">#ffa6bc</color>
+    <color name="note_pink">#ff9d9e</color>
     <color name="note_purple">#a991ff</color>
     <color name="note_skyblue">#87a5ff</color>
     <color name="note_yellow">#ffe667</color>
     <color name="note_green">#8aff90</color>
-    <color name="note_orange">#ffab6b</color>
-
+    <color name="note_orange">#ffc894</color>
 
 </resources>

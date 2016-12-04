@@ -66,10 +66,15 @@ public class Data_Function {
     }
 
     public static void saveData(Context c,String Title, String getText, String voicePath, String sdate, String sloca, String sche, String contact){
-        int[] colors_autumn={Color.argb(225,167,205,226),Color.argb(225,210,213,221),Color.argb(255,210,187,160),Color.argb(255,255,146,139),Color.argb(255,199,203,133)};
+        int[] colors = {Color.parseColor("#ffa6bc"),//粉紅
+                Color.parseColor("#FFA7CDE2"),//天空藍
+                Color.parseColor("#FFFFEF9F"),//鵝黃色
+                Color.parseColor("#FFB8FFBC"),//草綠色
+                Color.parseColor("#FFFFC894"),//橘色
+        };
         int r = (int)(Math.random()*5-1);
         item = new SQL_implement(c);
-        SQL_Item temp = new SQL_Item(0, new Date().getTime(), colors_autumn[r], Title, getText, voicePath, sdate, sloca, sche, contact,0);
+        SQL_Item temp = new SQL_Item(0, new Date().getTime(), colors[r] , Title, getText, voicePath, sdate, sloca, sche, contact,0);
         temp=item.insert(temp);
         Log.e("SAVE","ID="+temp.getId()+" , date="+temp.getDatetime()+" , Title="+temp.getTitle()+" , contant="+temp.getContent()+" , top="+temp.getTop());
     }
