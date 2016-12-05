@@ -127,10 +127,10 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         holder.btn_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-
+                final View vitem = LayoutInflater.from(mContext).inflate(R.layout.deletedialog, null);
                 AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-                dialog.setTitle("確定要刪除嗎?");
-                dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                dialog.setView(vitem);
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         File f = new File(mlist.get(position).getFileName());
@@ -144,7 +144,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
                             Snackbar.make(v, "文件不存在", Snackbar.LENGTH_SHORT).show();
                         }
                     }
-                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                     }
@@ -207,7 +207,9 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 ColorPicker colorPicker = new ColorPicker(mContext);
-                colorPicker.setColors(colors).setRoundColorButton(true).setTitle("請選擇便條顏色");
+                colorPicker.setColors(colors).setRoundColorButton(true);
+                colorPicker.setTitle("請選擇便條顏色");
+                colorPicker.setColorButtonTickColor(Color.BLACK);
                 colorPicker.setOnChooseColorListener(new ColorPicker.OnChooseColorListener() {
                     @Override
                     public void onChooseColor(int colorposition,int color) {

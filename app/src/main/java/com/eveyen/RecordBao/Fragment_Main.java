@@ -67,7 +67,7 @@ public class Fragment_Main extends Fragment {
          */
         final SwipeRefreshLayout swiperefreshlayout = (SwipeRefreshLayout) v.findViewById(R.id.demo_swiperefreshlayout);
         swiperefreshlayout.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        swiperefreshlayout.setColorSchemeResources(R.color.swipe_blue,R.color.swipe_red,R.color.swipe_orenge,R.color.swipe_green);//刷新進度條顏色
+        swiperefreshlayout.setColorSchemeResources(R.color.swipe_blue,R.color.swipe_red,R.color.swipe_green,R.color.swipe_orenge);//刷新進度條顏色
         swiperefreshlayout.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));
         swiperefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -79,7 +79,7 @@ public class Fragment_Main extends Fragment {
                         swiperefreshlayout.setRefreshing(false);
                         Snackbar.make(v, "已更新", Snackbar.LENGTH_SHORT).show();
                     }
-                }, 3500);//刷新秒數
+                }, 2500);//刷新秒數
             }
         });
     }

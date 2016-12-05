@@ -357,8 +357,10 @@ public class Text_mining {
         for (int i = 0; i < size; i++) {
             String token = inputList.get(i);
             if((TagList.get(i).equals("N") || TagList.get(i).equals("DET"))&& !DoneList.get(i)){
-                request+=token+",";
-                temp[i]=true;
+                if(!(inputList.get(i).contains("你")||inputList.get(i).contains("我")||inputList.get(i).contains("他"))) {
+                    request += token + ",";
+                    temp[i] = true;
+                }
             }
         }
         result = JsonToPlaceName(connectToPlaceApi(location,5000,request));
@@ -476,5 +478,4 @@ public class Text_mining {
         }
         return null;
     }
-
 }
