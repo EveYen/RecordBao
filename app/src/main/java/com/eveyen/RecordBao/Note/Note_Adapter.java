@@ -272,24 +272,26 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final String newcontent = editText.getText().toString();
-                temp.setContent(editText.getText().toString());
+                if(!newcontent.equals(temp.getContent())){
+                    temp.setContent(editText.getText().toString());
 
-                new Thread(){
-                    @Override
-                    public void run(){
-                        text_mining = new Text_mining(mContext, newcontent); //傳上去CKIP
-                        temp.setScheduleDate(text_mining.getDate());
-                        try {
-                            temp.setScheduleLocation(text_mining.getLocation());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                    new Thread(){
+                        @Override
+                        public void run(){
+                            text_mining = new Text_mining(mContext, newcontent); //傳上去CKIP
+                            temp.setScheduleDate(text_mining.getDate());
+                            try {
+                                temp.setScheduleLocation(text_mining.getLocation());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            updateProHandler.sendEmptyMessage(500);
                         }
-                        updateProHandler.sendEmptyMessage(500);
-                    }
-                }.start();
-                Log.e("TAG",newcontent);
+                    }.start();
+                    Log.e("TAG",newcontent);
+                }
             }
         }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override

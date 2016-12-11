@@ -145,6 +145,13 @@ public class Text_mining {
                         DoneList.set(i + 1, true);
                     }
                 }
+                if(token.equals("下")){
+                    if(inputList.get(i + 1).equals("禮拜")||inputList.get(i + 1).equals("星期")||inputList.get(i + 1).equals("週")){
+                        datestr = testDateFormat("7天", calendar, now, AM_PM);
+                        DoneList.set(i, true);
+                        DoneList.set(i + 1, true);
+                    }
+                }
             }
         }
         return datestr;
@@ -235,6 +242,7 @@ public class Text_mining {
                 case '天':
                     if (num == 2) this.calendar.add(Calendar.DATE, +1);
                     if (num == 3) this.calendar.add(Calendar.DATE, +2);
+                    if (num == 7) this.calendar.add(Calendar.DATE, +7);
                     break;
             }
             if(calendar.get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY))

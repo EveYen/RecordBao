@@ -253,6 +253,11 @@ public class FloatWindows extends Service {
                 Data_Function.saveData(getBaseContext(), Title, getText, voicePath, Sdate, Sloca, Sche, Person);
                 Person = "";
             }
+            String temp="";
+            for(int i=0;i<inputList.size();i++){
+                temp+= "/"+inputList.get(i)+"("+TagList.get(i)+")";
+            }
+            Log.e("CKIP",temp);
         }
     };
 
