@@ -1,13 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="@color/fragment_backg">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/demo_swiperefreshlayout"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="wrap_content"
         android:scrollbars="vertical"
         >
     <android.support.v7.widget.RecyclerView

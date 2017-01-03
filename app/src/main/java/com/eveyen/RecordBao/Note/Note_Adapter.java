@@ -239,7 +239,7 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
         Collections.sort(mlist, new Comparator<SQL_Item>() {
             @Override
             public int compare(SQL_Item lhs, SQL_Item rhs) {
-                return (int)lhs.getDatetime()-(int)rhs.getDatetime();
+                return (int)rhs.getDatetime()-(int)lhs.getDatetime();
             }
         });
         Collections.sort(mlist, new Comparator<SQL_Item>() {
@@ -249,7 +249,6 @@ public class Note_Adapter extends RecyclerView.Adapter<Note_Adapter.ViewHolder> 
             }
         });
     }
-
     public void Alert(final SQL_Item temp, final int position) {
 
         final Handler updateProHandler = new Handler() {

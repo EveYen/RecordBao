@@ -32,6 +32,7 @@ public class Fragment_Main extends Fragment {
     private SQL_implement item;
     private ArrayList<SQL_Item> lists;
     private RecyclerView rvContacts;
+    private int infocount = 0 , topcount = 0;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,8 +50,14 @@ public class Fragment_Main extends Fragment {
     }
 
     public void initRecyclerView(){
+        topcount=0;
         item = new SQL_implement(getContext());
         lists = SQL_implement.getAll();
+
+        infocount = lists.size();
+        for(int i=0;i<infocount;i++){
+            if(lists.get(i).getTop()==1) topcount++;
+        }
 
         final Note_Adapter adapter = new Note_Adapter(getContext(),lists);
 
@@ -76,6 +83,7 @@ public class Fragment_Main extends Fragment {
                     @Override
                     public void run() {
                         initRecyclerView();
+                        ((LinearLayoutManager)rvContacts.getLayoutManager()).scrollToPositionWithOffset(topcount,rvContacts.getTop());
                         swiperefreshlayout.setRefreshing(false);
                         Snackbar.make(v, "已更新", Snackbar.LENGTH_SHORT).show();
                     }

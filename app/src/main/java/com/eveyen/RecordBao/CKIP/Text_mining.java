@@ -43,7 +43,7 @@ public class Text_mining {
     static ArrayList<String> inputList; //宣告動態陣列 存切詞的name
     static ArrayList<String> TagList;   //宣告動態陣列 存切詞的詞性
     static ArrayList<Boolean> DoneList;   //宣告動態陣列 確認是否已經分析過
-    Calendar calendar, now;
+    Calendar calendar, now, temp;
     SimpleDateFormat time_in_min = new SimpleDateFormat("yyyy-MM-dd HH:mm EEEE");
     SimpleDateFormat time_in_hour = new SimpleDateFormat("yyyy-MM-dd HH:00 EEEE");
     SimpleDateFormat time_in_day = new SimpleDateFormat("yyyy-MM-dd EEEE");
@@ -52,6 +52,8 @@ public class Text_mining {
     private String Key = "AIzaSyBHkShKCuIqzU604t7VGsGylpToOecQaCo";
     String contactName = "";
     JSONObject j;
+
+    int jump=0;
 
     public Text_mining(Context context, String textString) {
         mcontext = context;
@@ -69,7 +71,6 @@ public class Text_mining {
 
         for (Term t : connect.getTerm()) {
             inputList.add(t.getTerm()); // t.getTerm()會讀到斷詞的String，將其存到inputList陣列
-            Log.e(TAG,t.getTerm());
             TagList.add(t.getTag());    // t.getTag() 會讀到斷詞的詞性，將其存到TagList陣列
             DoneList.add(false);
         }
@@ -92,8 +93,14 @@ public class Text_mining {
      *
      */
     public String getDate() {
+        //初始化每個時間基準都為現在，每週第一天是星期一
         calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
         now = Calendar.getInstance();
+        now.setFirstDayOfWeek(Calendar.MONDAY);
+        temp = Calendar.getInstance();
+        temp.setFirstDayOfWeek(Calendar.MONDAY);
+
         String datestr = time_in_min.format(now.getTime());
         int AM_PM = -1;//凌晨＝1;早上＝1，上午＝1，中午＝2，下午＝2，傍晚＝2，晚上＝2
         for (int i = 0; i < TagList.size(); i++) {
@@ -120,6 +127,96 @@ public class Text_mining {
                     datestr = testDateFormat("3天", calendar, now, AM_PM);
                     DoneList.set(i, true);
                 }
+
+                if(token.contains("星期")||token.contains("禮拜")||token.contains("週")){
+                    int index = 0 , two = 0;
+
+                    if(jump==0){
+                        temp.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+                        temp.add(Calendar.DATE,-7);
+                    }
+                    if(token.equals("禮拜")||token.equals("星期")){
+                        datestr = testDateFormat("7天", calendar, now, AM_PM);
+                        DoneList.set(i, true);
+                        DoneList.set(i + 1, true);
+                    }
+                    if(i < TagList.size() - 1 && token.contains("禮拜")){
+                        index = ChiToNumber(inputList.get(i + 1));
+                        if(inputList.get(i + 1).equals("天")) index=8;
+                        two = 1;
+                        Log.e("index" , String.valueOf(index));
+                    }
+                    if(token.length() > 2 && token.contains("星期")){
+                        index = ChiToNumber(token.split("星期")[1]);
+                        if(token.split("星期")[1].equals("天")) index=8;
+                        Log.e("index" , String.valueOf(index));
+                    }
+                    if(token.length() > 1 && token.contains("週")){
+                        index = ChiToNumber(token.split("週")[1]);
+                        if(token.split("週")[1].equals("天")) index=8;
+                        Log.e("index" , String.valueOf(index));
+                    }
+
+                    switch (index) {
+                        case 1:
+                            datestr = testDateFormat("8天", temp, now, AM_PM);
+                            DoneList.set(i, true);
+                            if (jump >= 1) DoneList.set(i - 1, true);
+                            if (jump == 2) DoneList.set(i - 2, true);
+                            if (two != 0) DoneList.set(i + 1, true);
+                            break;
+                        case 2:
+                            datestr = testDateFormat("9天", temp, now, AM_PM);
+                            DoneList.set(i, true);
+                            if (jump >= 1) DoneList.set(i - 1, true);
+                            if (jump == 2) DoneList.set(i - 2, true);
+                            if (two != 0) DoneList.set(i + 1, true);
+                            break;
+                        case 3:
+                            datestr = testDateFormat("10天", temp, now, AM_PM);
+                            DoneList.set(i, true);
+                            if (jump >= 1) DoneList.set(i - 1, true);
+                            if (jump == 2) DoneList.set(i - 2, true);
+                            if (two != 0) DoneList.set(i + 1, true);
+                            break;
+                        case 4:
+                            datestr = testDateFormat("11天", temp, now, AM_PM);
+                            DoneList.set(i, true);
+                            if (jump >= 1) DoneList.set(i - 1, true);
+                            if (jump == 2) DoneList.set(i - 2, true);
+                            if (two != 0) DoneList.set(i + 1, true);
+                            break;
+                        case 5:
+                            datestr = testDateFormat("12天", temp, now, AM_PM);
+                            DoneList.set(i, true);
+                            if (jump >= 1) DoneList.set(i - 1, true);
+                            if (jump == 2) DoneList.set(i - 2, true);
+                            if (two != 0) DoneList.set(i + 1, true);
+                            break;
+                        case 6:
+                            datestr = testDateFormat("13天", temp, now, AM_PM);
+                            DoneList.set(i, true);
+                            if (jump >= 1) DoneList.set(i - 1, true);
+                            if (jump == 2) DoneList.set(i - 2, true);
+                            if (two != 0) DoneList.set(i + 1, true);
+                            break;
+                        case 7:
+                            datestr = testDateFormat("14天", temp, now, AM_PM);
+                            DoneList.set(i, true);
+                            if (jump >= 1) DoneList.set(i - 1, true);
+                            if (jump == 2) DoneList.set(i - 2, true);
+                            if (two != 0) DoneList.set(i + 1, true);
+                            break;
+                        case 8:
+                            datestr = testDateFormat("14天", temp, now, AM_PM);
+                            DoneList.set(i, true);
+                            if (jump >= 1) DoneList.set(i - 1, true);
+                            if (jump == 2) DoneList.set(i - 2, true);
+                            if (two != 0) DoneList.set(i + 1, true);
+                            break;
+                    }
+                }
+
             }
             if (tag.equals("POST")) {
                 if (token.equals("半")) {
@@ -130,6 +227,12 @@ public class Text_mining {
             if (tag.equals("N") && testDateFormat(token, calendar, now, AM_PM) != null) { //CKIP解析成名詞
                 datestr = testDateFormat(token, calendar, now, AM_PM);
                 DoneList.set(i, true);
+            }
+            if (tag.equals("M")){
+                if(token.equals("個")){
+                    jump+=1;
+                    continue;
+                }
             }
             if (tag.equals("DET") && i < TagList.size() - 1) {//CKIP解析成名詞
                 if (inputList.get(i + 1).equals("號") || inputList.get(i + 1).equals("分") || inputList.get(i + 1).equals("點")) {
@@ -145,12 +248,14 @@ public class Text_mining {
                         DoneList.set(i + 1, true);
                     }
                 }
-                if(token.equals("下")){
-                    if(inputList.get(i + 1).equals("禮拜")||inputList.get(i + 1).equals("星期")||inputList.get(i + 1).equals("週")){
-                        datestr = testDateFormat("7天", calendar, now, AM_PM);
-                        DoneList.set(i, true);
-                        DoneList.set(i + 1, true);
+                if(token.equals("下")||token.equals("這")){
+                    temp.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+                    if(token.equals("這")){
+                        temp.add(Calendar.DATE,-7);
                     }
+                    Log.e("本週日",time_in_day.format(temp.getTime()));
+                    jump+=1;
+                    continue;
                 }
             }
         }
@@ -240,9 +345,18 @@ public class Text_mining {
                     calendar.set(Calendar.MINUTE, num);
                     break;
                 case '天':
-                    if (num == 2) this.calendar.add(Calendar.DATE, +1);
-                    if (num == 3) this.calendar.add(Calendar.DATE, +2);
-                    if (num == 7) this.calendar.add(Calendar.DATE, +7);
+                    if (num == 2) calendar.add(Calendar.DATE, +1);
+                    if (num == 3) calendar.add(Calendar.DATE, +2);
+                    if (num == 7) calendar.add(Calendar.DATE, +7);
+                    //下週
+                    if (num == 8) calendar.add(Calendar.DATE, +1);
+                    if (num == 9) calendar.add(Calendar.DATE, +2);
+                    if (num == 10) calendar.add(Calendar.DATE, +3);
+                    if (num == 11) calendar.add(Calendar.DATE, +4);
+                    if (num == 12) calendar.add(Calendar.DATE, +5);
+                    if (num == 13) calendar.add(Calendar.DATE, +6);
+                    if (num == 14) calendar.add(Calendar.DATE, +7);
+
                     break;
             }
             if(calendar.get(Calendar.HOUR_OF_DAY) == now.get(Calendar.HOUR_OF_DAY))
@@ -364,23 +478,26 @@ public class Text_mining {
 
         for (int i = 0; i < size; i++) {
             String token = inputList.get(i);
-            if((TagList.get(i).equals("N") || TagList.get(i).equals("DET"))&& !DoneList.get(i)){
-                if(!(inputList.get(i).contains("你")||inputList.get(i).contains("我")||inputList.get(i).contains("他"))) {
+            if(!DoneList.get(i) && (TagList.get(i).equals("N")||TagList.get(i).equals("Vi")||TagList.get(i).equals("N"))){
+                if(!(inputList.get(i).contains("你")||inputList.get(i).contains("我")||inputList.get(i).contains("他")||inputList.get(i).contains("在")||inputList.get(i).contains("去"))) {
                     request += token + ",";
                     temp[i] = true;
                 }
             }
         }
         result = JsonToPlaceName(connectToPlaceApi(location,5000,request));
+        request = "";
         if(result!=null){
             for (int i = 0; i < size; i++) {
                 if(temp[i]){
                     if(result.contains(inputList.get(i))) {
                         DoneList.set(i, true);
+                        request +=  inputList.get(i) + ",";
                     }
                 }
             }
         }
+        result = JsonToPlaceName(connectToPlaceApi(location,5000,request));
         return result;
     }
 
