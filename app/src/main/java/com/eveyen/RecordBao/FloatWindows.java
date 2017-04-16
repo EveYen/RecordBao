@@ -258,6 +258,7 @@ public class FloatWindows extends Service {
                 temp+= "/"+inputList.get(i)+"("+TagList.get(i)+")";
             }
             Log.e("CKIP",temp);
+
         }
     };
 

@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="materialtabs-2.0.2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/io.karim/materialtabs/2.0.2/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/io.karim/materialtabs/2.0.2/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.karim/materialtabs/2.0.2/f7b97f4a1af2d18b5dafd20b280bce523377ba5/materialtabs-2.0.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

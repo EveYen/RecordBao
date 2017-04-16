@@ -62,8 +62,8 @@ public class Text_mining {
         DoneList = new ArrayList<Boolean>();
         String CKIP_IP = "140.109.19.104";
         int CKIP_PORT = 1501;
-        String CKIP_USERNAME = "eve223267";
-        String CKIP_PASSWORD = "convallaria0824";
+        String CKIP_USERNAME = "boannyen84";
+        String CKIP_PASSWORD = "nckucsieiir106";
         CKIP connect = new CKIP(CKIP_IP, CKIP_PORT, CKIP_USERNAME,
                 CKIP_PASSWORD);
         connect.setRawText(textString);
@@ -95,11 +95,11 @@ public class Text_mining {
     public String getDate() {
         //初始化每個時間基準都為現在，每週第一天是星期一
         calendar = Calendar.getInstance();
-        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        //calendar.setFirstDayOfWeek(Calendar.MONDAY);
         now = Calendar.getInstance();
-        now.setFirstDayOfWeek(Calendar.MONDAY);
+        //now.setFirstDayOfWeek(Calendar.MONDAY);
         temp = Calendar.getInstance();
-        temp.setFirstDayOfWeek(Calendar.MONDAY);
+        //temp.setFirstDayOfWeek(Calendar.MONDAY);
 
         String datestr = time_in_min.format(now.getTime());
         int AM_PM = -1;//凌晨＝1;早上＝1，上午＝1，中午＝2，下午＝2，傍晚＝2，晚上＝2
@@ -130,7 +130,6 @@ public class Text_mining {
 
                 if(token.contains("星期")||token.contains("禮拜")||token.contains("週")){
                     int index = 0 , two = 0;
-
                     if(jump==0){
                         temp.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
                         temp.add(Calendar.DATE,-7);
@@ -144,6 +143,10 @@ public class Text_mining {
                         index = ChiToNumber(inputList.get(i + 1));
                         if(inputList.get(i + 1).equals("天")) index=8;
                         two = 1;
+                        Log.e("index" , String.valueOf(index));
+                    }
+                    if(token.equals("禮拜天")){
+                        index=8;
                         Log.e("index" , String.valueOf(index));
                     }
                     if(token.length() > 2 && token.contains("星期")){
@@ -249,7 +252,7 @@ public class Text_mining {
                     }
                 }
                 if(token.equals("下")||token.equals("這")){
-                    temp.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
+                    temp.set(Calendar.DAY_OF_WEEK,Calendar.SATURDAY);
                     if(token.equals("這")){
                         temp.add(Calendar.DATE,-7);
                     }
@@ -349,13 +352,13 @@ public class Text_mining {
                     if (num == 3) calendar.add(Calendar.DATE, +2);
                     if (num == 7) calendar.add(Calendar.DATE, +7);
                     //下週
-                    if (num == 8) calendar.add(Calendar.DATE, +1);
-                    if (num == 9) calendar.add(Calendar.DATE, +2);
-                    if (num == 10) calendar.add(Calendar.DATE, +3);
-                    if (num == 11) calendar.add(Calendar.DATE, +4);
-                    if (num == 12) calendar.add(Calendar.DATE, +5);
-                    if (num == 13) calendar.add(Calendar.DATE, +6);
-                    if (num == 14) calendar.add(Calendar.DATE, +7);
+                    if (num == 8) calendar.add(Calendar.DATE, +2);
+                    if (num == 9) calendar.add(Calendar.DATE, +3);
+                    if (num == 10) calendar.add(Calendar.DATE, +4);
+                    if (num == 11) calendar.add(Calendar.DATE, +5);
+                    if (num == 12) calendar.add(Calendar.DATE, +6);
+                    if (num == 13) calendar.add(Calendar.DATE, +7);
+                    if (num == 14) calendar.add(Calendar.DATE, +8);
 
                     break;
             }
@@ -479,7 +482,7 @@ public class Text_mining {
         for (int i = 0; i < size; i++) {
             String token = inputList.get(i);
             if(!DoneList.get(i) && (TagList.get(i).equals("N")||TagList.get(i).equals("Vi")||TagList.get(i).equals("N"))){
-                if(!(inputList.get(i).contains("你")||inputList.get(i).contains("我")||inputList.get(i).contains("他")||inputList.get(i).contains("在")||inputList.get(i).contains("去"))) {
+                if(!(inputList.get(i).contains("你")||inputList.get(i).contains("我")||inputList.get(i).contains("他")||inputList.get(i).contains("在")||inputList.get(i).contains("去")||inputList.get(i).contains("吃"))) {
                     request += token + ",";
                     temp[i] = true;
                 }

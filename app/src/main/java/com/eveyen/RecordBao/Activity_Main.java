@@ -133,10 +133,6 @@ public class Activity_Main extends AppCompatActivity implements NavigationView.O
                 fragment = new Fragment_Main();
                 toolbar.setTitle("Note");
                 break;
-            case R.id.nav_record:
-                fragment = new Fragment_Record();
-                toolbar.setTitle("Record");
-                break;
             case R.id.nav_settings:
                 getFragmentManager().beginTransaction().replace(R.id.content_fragment, new SettingsFragment()).commit();
                 toolbar.setTitle("Settings");
